@@ -49,10 +49,10 @@ window.onload = async () => {
     mat4.translate(viewMatrix, viewMatrix, [-0.5, 0, 0])
 
     /* --------- create 2 cubes and translate them away from each other --------- */
-    shapes.push(createShape());
+    shapes.push(createCube());
     shapes[0].translate([0.5, 0, 0]);
-
-    shapes.push(createShape());
+    shapes.push(createPyramid());
+    //shapes.push(createShape());
     shapes[1].translate([-0.5, 0, 0]);
 
     /* --------- Attach event listener for keyboard events to the window --------- */
@@ -94,58 +94,58 @@ function render(now) {
 }
 
 
-function createShape() {
+function createCube() {
     /* --------- define vertex positions & colors --------- */
     /* -------------- 3 vertices per triangle ------------- */
     const vertices = [
         // X, Y, Z, W
-        0.2, 0.2, 0.2, 1,
-        -0.2, 0.2, 0.2, 1,
-        0.2, -0.2, 0.2, 1,
+        0.1, 0.1, 0.1, 1,
+        -0.1, 0.1, 0.1, 1,
+        0.1, -0.1, 0.1, 1,
 
-        -0.2, 0.2, 0.2, 1,
-        -0.2, -0.2, 0.2, 1,
-        0.2, -0.2, 0.2, 1, // front face end
+        -0.1, 0.1, 0.1, 1,
+        -0.1, -0.1, 0.1, 1,
+        0.1, -0.1, 0.1, 1, // front face end
 
-        -0.2, -0.2, -0.2, 1,
-        -0.2, -0.2, 0.2, 1,
-        -0.2, 0.2, 0.2, 1,
+        -0.1, -0.1, -0.1, 1,
+        -0.1, -0.1, 0.1, 1,
+        -0.1, 0.1, 0.1, 1,
 
-        -0.2, -0.2, -0.2, 1,
-        -0.2, 0.2, 0.2, 1,
-        -0.2, 0.2, -0.2, 1, // left face end
+        -0.1, -0.1, -0.1, 1,
+        -0.1, 0.1, 0.1, 1,
+        -0.1, 0.1, -0.1, 1, // left face end
 
-        0.2, 0.2, -0.2, 1,
-        -0.2, -0.2, -0.2, 1,
-        -0.2, 0.2, -0.2, 1,
+        0.1, 0.1, -0.1, 1,
+        -0.1, -0.1, -0.1, 1,
+        -0.1, 0.1, -0.1, 1,
 
-        0.2, 0.2, -0.2, 1,
-        0.2, -0.2, -0.2, 1,
-        -0.2, -0.2, -0.2, 1, // back face end
+        0.1, 0.1, -0.1, 1,
+        0.1, -0.1, -0.1, 1,
+        -0.1, -0.1, -0.1, 1, // back face end
 
-        0.2, -0.2, 0.2, 1,
-        -0.2, -0.2, -0.2, 1,
-        0.2, -0.2, -0.2, 1,
+        0.1, -0.1, 0.1, 1,
+        -0.1, -0.1, -0.1, 1,
+        0.1, -0.1, -0.1, 1,
 
-        0.2, -0.2, 0.2, 1,
-        -0.2, -0.2, 0.2, 1,
-        -0.2, -0.2, -0.2, 1, // bottom face end
+        0.1, -0.1, 0.1, 1,
+        -0.1, -0.1, 0.1, 1,
+        -0.1, -0.1, -0.1, 1, // bottom face end
 
-        0.2, 0.2, 0.2, 1,
-        0.2, -0.2, -0.2, 1,
-        0.2, 0.2, -0.2, 1,
+        0.1, 0.1, 0.1, 1,
+        0.1, -0.1, -0.1, 1,
+        0.1, 0.1, -0.1, 1,
 
-        0.2, -0.2, -0.2, 1,
-        0.2, 0.2, 0.2, 1,
-        0.2, -0.2, 0.2, 1, // right face end
+        0.1, -0.1, -0.1, 1,
+        0.1, 0.1, 0.1, 1,
+        0.1, -0.1, 0.1, 1, // right face end
 
-        0.2, 0.2, 0.2, 1,
-        0.2, 0.2, -0.2, 1,
-        -0.2, 0.2, -0.2, 1,
+        0.1, 0.1, 0.1, 1,
+        0.1, 0.1, -0.1, 1,
+        -0.1, 0.1, -0.1, 1,
 
-        0.2, 0.2, 0.2, 1,
-        -0.2, 0.2, -0.2, 1,
-        -0.2, 0.2, 0.2, 1, // Top face end
+        0.1, 0.1, 0.1, 1,
+        -0.1, 0.1, -0.1, 1,
+        -0.1, 0.1, 0.1, 1, // Top face end
     ];
 
     const colorData = [
@@ -169,7 +169,60 @@ function createShape() {
     /* --------- create shape object and initialize data --------- */
     const cube = new Shape();
     cube.initData(vertices, colors)
-
     return cube;
+}
+
+function createPyramid() {
+    /* --------- define vertex positions & colors --------- */
+    /* -------------- 3 vertices per triangle ------------- */
+    const vertices = [
+        // X, Y, Z, W
+        -0.1, -0.1, 0.0, 1,
+        0.1, -0.1, 0.0, 1,
+        -0.1, 0.1, 0.0, 1,
+
+        -0.1, 0.1, 0.0, 1,
+        0.1, -0.1, 0.0, 1,
+        0.1, 0.1, 0.0, 1,
+
+        -0.1, 0.1, 0.0, 1,
+        0.1, 0.1, 0.0, 1,
+        0.0, 0.0, 0.1, 1,
+
+        0.1, 0.1, 0.0, 1,
+        0.1, -0.1, 0.0, 1,
+        0.0, 0.0, 0.0, 1,
+
+        -0.1, -0.1, 0.0, 1,
+        -0.1, 0.1, 0.0, 1,
+        0.0, 0.0, 0.1, 1,
+
+        -0.1, -0.1, 0.0, 1,
+        0.1, -0.1, 0.0, 1,
+        0.0, 0.0, 0.1, 1,
+
+    ];
+
+    const colorData = [
+        [1.0, 0.0, 0.0, 1.0],    // left face: red
+        [0.0, 1.0, 0.0, 1.0],    // back face: green
+        [0.0, 0.0, 1.0, 1.0],    // Bottom face: blue
+        [1.0, 1.0, 0.0, 1.0],    // Right face: yellow
+        [1.0, 0.0, 1.0, 1.0],    // top face: purple
+    ];
+
+    const colors = [];
+
+    /* --------- add one color per face, so 6 times for each color --------- */
+    colorData.forEach(color => {
+        for (let i = 0; i < 5; ++i) {
+            colors.push(color);
+        }
+    });
+
+    /* --------- create shape object and initialize data --------- */
+    const pyramid = new Shape();
+    pyramid.initData(vertices, colors)
+    return pyramid;
 }
 
