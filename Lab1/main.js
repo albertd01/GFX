@@ -53,10 +53,19 @@ window.onload = async () => {
     shapes[0].translate([0.5, 0, 0]);
     shapes.push(createSquareBasedPyramid());
     shapes[1].translate([-0.5, 0, 0]);
-
     shapes.push(createHexPrism());
     shapes[2].translate([0.0, 0.5, 0]);
-
+    shapes.push(createCube());
+    shapes[3].translate([0.0, -0.5, 0]);
+    shapes.push(createSquareBasedPyramid());
+    shapes[4].translate([-0.8, 0.0, 0]);
+    shapes.push(createHexPrism());
+    shapes[5].translate([0.8, 0.0, 0.0])
+    shapes.push(createSquareBasedPyramid());
+    shapes[6].translate([1.1, 0.0, 0.0])
+    shapes.push(createCube());
+    shapes[7].translate([1.4, 0.0, 0.0])
+    shapes.push(createCube());
     /* --------- Attach event listener for keyboard events to the window --------- */
     window.addEventListener("keydown", (event) => {
         /* ----- this event contains all the information you will need to process user interaction ---- */
@@ -88,7 +97,7 @@ function render(now) {
 
     shapes.forEach(shape => {
         /* --------- scale rotation amount by time difference --------- */
-        shape.rotate(1 * delta, [0, 1, 1]);
+        //shape.rotate(1 * delta, [0, 1, 1]);
         shape.draw();
     });
 
