@@ -5,6 +5,8 @@ const toRad = glMatrix.glMatrix.toRadian;
 
 const shapes = [];
 let gl = null;
+let currentChoice = null;
+let wcs = null;
 
 const locations = {
     attributes: {
@@ -46,31 +48,120 @@ window.onload = async () => {
     mat4.lookAt(viewMatrix, [0, 0, 2], [0, 0, 0], [0, 1, 0]);
 
     /* --------- translate view matrix --------- */
-    mat4.translate(viewMatrix, viewMatrix, [-0.5, 0, 0])
+    //mat4.translate(viewMatrix, viewMatrix, [-0.5, 0.0, -0.5])
+    moveCamera(-0.5, 0.0, -0.5);
 
-    /* --------- create 2 cubes and translate them away from each other --------- */
+    /* --------- create 9 shapes and translate them away from each other --------- */
+    wcs = createWCS();
     shapes.push(createCube());
     shapes[0].translate([0.5, 0, 0]);
+
     shapes.push(createSquareBasedPyramid());
     shapes[1].translate([-0.5, 0, 0]);
+
     shapes.push(createHexPrism());
     shapes[2].translate([0.0, 0.5, 0]);
+
     shapes.push(createCube());
     shapes[3].translate([0.0, -0.5, 0]);
+
     shapes.push(createSquareBasedPyramid());
     shapes[4].translate([-0.8, 0.0, 0]);
+
     shapes.push(createHexPrism());
-    shapes[5].translate([0.8, 0.0, 0.0])
+    shapes[5].translate([0.8, 0.0, 0.0]);
+
     shapes.push(createSquareBasedPyramid());
-    shapes[6].translate([1.1, 0.0, 0.0])
+    shapes[6].translate([1.1, 0.0, 0.0]);
+
     shapes.push(createCube());
-    shapes[7].translate([1.4, 0.0, 0.0])
+    shapes[7].translate([1.4, 0.0, 0.0]);
+
     shapes.push(createCube());
-    /* --------- Attach event listener for keyboard events to the window --------- */
-    window.addEventListener("keydown", (event) => {
-        /* ----- this event contains all the information you will need to process user interaction ---- */
-        console.log(event)
-    })
+
+    window.addEventListener("keydown", (event) =>
+        {
+            switch (event.key){
+                case '0':
+                    currentChoice = 0;
+                    break;
+                case '1':
+                    currentChoice = 1;
+                    break;
+                case '2':
+                    currentChoice = 2;
+                    break;
+                case '3':
+                    currentChoice = 3;
+                    break;
+                case '4':
+                    currentChoice = 4;
+                    break;
+                case '5':
+                    currentChoice = 5;
+                    break;
+                case '6':
+                    currentChoice = 6;
+                    break;
+                case '7':
+                    currentChoice = 7;
+                    break;
+                case '8':
+                    currentChoice = 8;
+                    break;
+                case '9':
+                    currentChoice = 9;
+                    break;
+            }
+        }
+    )
+
+
+    const moveSpeed = 0.01;
+    window.addEventListener("keydown", (event) => 
+        {   
+            let xPos = 0;
+            let yPos = 0;
+            switch (event.key) {
+                case 'ArrowUp':
+                    yPos -= moveSpeed;
+                    break;
+                case 'ArrowDown':
+                    yPos += moveSpeed;
+                    break;
+                case 'ArrowLeft':
+                    xPos -= moveSpeed;
+                    break;
+                case 'ArrowRight':
+                    xPos += moveSpeed;
+                    break;
+            }
+            moveCamera(xPos, yPos, 0);
+        }
+    )
+
+    let isDragging = false;
+    let offsetX, offsetY;
+
+    window.addEventListener('mousedown', (event) => {
+        isDragging = true;
+
+        offsetX = event.clientX - canvas.getBoundingClientRect().left;
+        offsetY = event.clientY - canvas.getBoundingClientRect().top;
+    });
+    
+    window.addEventListener('mouseup', () => {
+        isDragging = false;
+    });
+    
+    window.addEventListener('mousemove', (event) => {
+        if (isDragging) {
+        const xPos = (event.clientX - offsetX)/10000;
+        const yPos = (event.clientY - offsetY)/10000;
+    
+        moveCamera(xPos, yPos, 0);
+        }
+    });
 
     /* --------- Load some data from external files - only works with an http server --------- */
     //  await loadSomething();
@@ -97,11 +188,17 @@ function render(now) {
 
     shapes.forEach(shape => {
         /* --------- scale rotation amount by time difference --------- */
-        //shape.rotate(1 * delta, [0, 1, 1]);
+        shape.rotate(1 * delta, [0, 1, 1]);
         shape.draw();
     });
-
+    wcs.draw();
     requestAnimationFrame(render)
+}
+
+function moveCamera(x, y, z){
+    console.log("X: " + x);
+    console.log("Y: " + y);
+    mat4.translate(viewMatrix, viewMatrix, [x,y,z]);
 }
 
 

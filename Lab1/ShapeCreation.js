@@ -72,9 +72,6 @@ function createCube(){
     return createShape(vertices, colors)
 }
 
-function createTriangleBasedPyramid(){
-
-}
 
 function createSquareBasedPyramid(){
     const vertices = [
@@ -135,8 +132,27 @@ function createSquareBasedPyramid(){
     return createShape(vertices, colors);
 }
 
-function createCone(){
+function createWCS(){
+    const vertices = [
+        0.0, 0.0, 0.0, 1.0, //origin
+        0.0, 0.0, 20.0, 1.0, //z-direction
+        
+        0.0, 0.0, 0.0, 1.0, //origin
+        0.0, 20.0, 0.0, 1.0, //y-direction
+        
+        0.0, 0.0, 0.0, 1.0, //origin
+        20.0, 0.0, 0.0, 1.0 //x-direction
+    ];
 
+    const colorData = [0.0, 0.0, 0.0, 1.0];
+
+    const colors = [];
+
+    for(let i = 0; i<6 ; ++i){
+        colors.push(colorData);
+    }
+
+    return createCS(vertices, colors);
 }
 
 function createHexPrism(){
@@ -259,24 +275,6 @@ function createHexPrism(){
     
 }
 
-function createTrianglePrism(){
-    
-
-}
-
-function createPentPrism(){
-
-}
-
-function createParallelepiped(){
-
-}
-
-function createRhombus(){
-
-}
-
-
 function createShape(vertices, colors){
     
 
@@ -284,4 +282,10 @@ function createShape(vertices, colors){
     const shape = new Shape();
     shape.initData(vertices, colors)
     return shape;
+}
+
+function createCS(vertices, colors){
+    const cs = new CoordinateSystem();
+    cs.initData(vertices, colors);
+    return cs;
 }
