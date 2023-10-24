@@ -42,6 +42,12 @@ class Shape {
         gl.drawArrays(gl.TRIANGLES, 0, this.vertices.length / 4);
     }
 
+    drawLCS(){
+        let lcs = createWCS();
+        lcs.setModelMatrix(this.modelMatrix);
+        lcs.draw();
+    }
+
     rotate(angle, axis, global = false) {
         /**
          * The transformation functions that glMatrix provides apply the new transformation as the right hand operand,

@@ -130,10 +130,10 @@ window.onload = async () => {
                     yPos += moveSpeed;
                     break;
                 case 'ArrowLeft':
-                    xPos -= moveSpeed;
+                    xPos += moveSpeed;
                     break;
                 case 'ArrowRight':
-                    xPos += moveSpeed;
+                    xPos -= moveSpeed;
                     break;
             }
             moveCamera(xPos, yPos, 0);
@@ -189,15 +189,24 @@ function render(now) {
     shapes.forEach(shape => {
         /* --------- scale rotation amount by time difference --------- */
         shape.rotate(1 * delta, [0, 1, 1]);
+        if(isChosen(shapes.indexOf(shape))){
+            shape.drawLCS();
+        }
         shape.draw();
     });
-    wcs.draw();
+
+    if(currentChoice===0){
+        wcs.draw();
+    }
+    
     requestAnimationFrame(render)
 }
 
+function isChosen(index){ 
+    return index+1===currentChoice ? true : false;
+}
+
 function moveCamera(x, y, z){
-    console.log("X: " + x);
-    console.log("Y: " + y);
     mat4.translate(viewMatrix, viewMatrix, [x,y,z]);
 }
 

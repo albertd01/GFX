@@ -14,4 +14,8 @@ class CoordinateSystem extends Shape{
         /* --------- draw the shape --------- */
         gl.drawArrays(gl.LINES, 0, this.vertices.length / 4);
     }
+
+    setModelMatrix(modelMatrix){
+        this.modelMatrix = modelMatrix;
+    }
 }
