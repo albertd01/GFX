@@ -81,25 +81,34 @@ window.onload = async () => {
     shapes.push(createCube());
 
     window.addEventListener("keydown", (event) =>{
+        axis = [1,1,1];
         switch(event.key){
             case 'a':
-                shapes[currentChoice - 1].scaleWidth(0.9);
+                axis = [0.9, 1, 1];
                 break;
             case 'A':
-                shapes[currentChoice - 1].scaleWidth(1.1);
+                axis = [1.1 ,1, 1];
                 break;
             case 'b':
-                shapes[currentChoice - 1].scaleHeight(0.9);
+                axis = [1, 0.9, 1];
                 break;
             case 'B':
-                shapes[currentChoice - 1].scaleHeight(1.1);
+                axis = [1, 1.1, 1];
                 break;
             case 'c':
-                shapes[currentChoice - 1].scaleDepth(0.9);
+                axis = [1, 1, 0.9];
                 break;
             case 'C':
-                shapes[currentChoice - 1].scaleDepth(1.1);
+                axis = [1, 1, 1.1];
                 break;
+        }
+        if(currentChoice===0){
+            shapes.forEach(shape=>{
+                shape.scale(axis, true);
+            })
+        }
+        else{
+            shapes[currentChoice-1].scale(axis);
         }
     })
 

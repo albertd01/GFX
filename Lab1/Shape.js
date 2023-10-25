@@ -48,16 +48,15 @@ class Shape {
         lcs.draw();
     }
 
-    scaleHeight(factor){
-        //scale along y-axis
-    }
-
-    scaleWidth(factor){
-        //scale along x-axis
-    }
-
-    scaleDepth(factor){
-        //scale along z-axis
+    scale(vector, global = false){
+        if(!global){
+            mat4.scale(this.modelMatrix,this.modelMatrix,vector);
+        }
+        else{
+            const scalingMatrix = mat4.create();
+            mat4.scale(scalingMatrix, scalingMatrix, vector);
+            mat4.mul(this.modelMatrix, scalingMatrix, this.modelMatrix);
+        }
     }
 
     rotate(angle, axis, global = false) {
