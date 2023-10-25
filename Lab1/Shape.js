@@ -48,6 +48,18 @@ class Shape {
         lcs.draw();
     }
 
+    scaleHeight(factor){
+        //scale along y-axis
+    }
+
+    scaleWidth(factor){
+        //scale along x-axis
+    }
+
+    scaleDepth(factor){
+        //scale along z-axis
+    }
+
     rotate(angle, axis, global = false) {
         /**
          * The transformation functions that glMatrix provides apply the new transformation as the right hand operand,

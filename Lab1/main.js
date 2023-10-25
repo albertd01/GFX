@@ -80,6 +80,49 @@ window.onload = async () => {
     shapes.push(createCube());
 
     window.addEventListener("keydown", (event) =>
+    {
+        switch(event.key){
+            case 'a':
+                shapes[currentChoice-1].scaleWidth(0.9);
+                break;
+            case 'A':
+                shapes[currentChoice-1].scaleWidth(1.1);
+                break;
+            case 'b':
+                shapes[currentChoice-1].scaleHeight(0.9);
+                break;
+            case 'B':
+                shapes[currentChoice-1].scaleHeight(1.1);
+                break;
+            case 'c':
+                shapes[currentChoice-1].scaleDepth(0.9);
+                break;
+            case 'C':
+                shapes[currentChoice-1].scaleDepth(1.1);
+                break;
+            case 'i':
+                //rotation clockwise around x-axis
+                break;
+            case 'k':
+                //rotation counterclockwise around x-axis
+                break;
+            case 'o':
+                //rotation clockwise around y-axis
+                break;
+            case 'u':
+                //rotation counterclockwise around y-axis
+                break;
+            case 'l':
+                //rotation clockwise around z-axis
+                break;
+            case 'j':
+                //rotation counterclockwise around z-axis
+                break;
+        }
+    }
+    )
+
+    window.addEventListener("keydown", (event) =>
         {
             switch (event.key){
                 case '0':
