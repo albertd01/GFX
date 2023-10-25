@@ -5,7 +5,8 @@ const toRad = glMatrix.glMatrix.toRadian;
 
 const shapes = [];
 let gl = null;
-let currentChoice = null;
+let currentChoice = 0;
+let cameraMovementEnabled = true;
 let wcs = null;
 
 const locations = {
@@ -79,108 +80,141 @@ window.onload = async () => {
 
     shapes.push(createCube());
 
-    window.addEventListener("keydown", (event) =>
-    {
+    window.addEventListener("keydown", (event) =>{
         switch(event.key){
             case 'a':
-                shapes[currentChoice-1].scaleWidth(0.9);
+                shapes[currentChoice - 1].scaleWidth(0.9);
                 break;
             case 'A':
-                shapes[currentChoice-1].scaleWidth(1.1);
+                shapes[currentChoice - 1].scaleWidth(1.1);
                 break;
             case 'b':
-                shapes[currentChoice-1].scaleHeight(0.9);
+                shapes[currentChoice - 1].scaleHeight(0.9);
                 break;
             case 'B':
-                shapes[currentChoice-1].scaleHeight(1.1);
+                shapes[currentChoice - 1].scaleHeight(1.1);
                 break;
             case 'c':
-                shapes[currentChoice-1].scaleDepth(0.9);
+                shapes[currentChoice - 1].scaleDepth(0.9);
                 break;
             case 'C':
-                shapes[currentChoice-1].scaleDepth(1.1);
+                shapes[currentChoice - 1].scaleDepth(1.1);
                 break;
+        }
+    })
+
+    window.addEventListener("keydown", (event) => {
+        let axis = [0,0,0];
+        switch (event.key) {
             case 'i':
-                //rotation clockwise around x-axis
+                axis = [-1, 0, 0];
                 break;
             case 'k':
-                //rotation counterclockwise around x-axis
+                axis = [1, 0, 0];
                 break;
             case 'o':
-                //rotation clockwise around y-axis
+                axis = [0, -1, 0];
                 break;
             case 'u':
-                //rotation counterclockwise around y-axis
+                axis = [0, 1, 0];
                 break;
             case 'l':
-                //rotation clockwise around z-axis
+                axis = [0, 0, -1];
                 break;
             case 'j':
-                //rotation counterclockwise around z-axis
+                axis = [0, 0, 1];
+                break;
+        }
+        if(currentChoice === 0){
+            shapes.forEach(shape => {
+                shape.rotate(0.1, axis, true);
+            })
+        }
+        else{
+            shapes[currentChoice-1].rotate(0.1, axis);
+        }
+    }
+    )
+
+    window.addEventListener("keydown", (event) => {
+        switch (event.key) {
+            case '0':
+                currentChoice = 0;
+                break;
+            case '1':
+                currentChoice = 1;
+                break;
+            case '2':
+                currentChoice = 2;
+                break;
+            case '3':
+                currentChoice = 3;
+                break;
+            case '4':
+                currentChoice = 4;
+                break;
+            case '5':
+                currentChoice = 5;
+                break;
+            case '6':
+                currentChoice = 6;
+                break;
+            case '7':
+                currentChoice = 7;
+                break;
+            case '8':
+                currentChoice = 8;
+                break;
+            case '9':
+                currentChoice = 9;
                 break;
         }
     }
     )
 
-    window.addEventListener("keydown", (event) =>
-        {
-            switch (event.key){
-                case '0':
-                    currentChoice = 0;
-                    break;
-                case '1':
-                    currentChoice = 1;
-                    break;
-                case '2':
-                    currentChoice = 2;
-                    break;
-                case '3':
-                    currentChoice = 3;
-                    break;
-                case '4':
-                    currentChoice = 4;
-                    break;
-                case '5':
-                    currentChoice = 5;
-                    break;
-                case '6':
-                    currentChoice = 6;
-                    break;
-                case '7':
-                    currentChoice = 7;
-                    break;
-                case '8':
-                    currentChoice = 8;
-                    break;
-                case '9':
-                    currentChoice = 9;
-                    break;
-            }
-        }
-    )
-
 
     const moveSpeed = 0.01;
-    window.addEventListener("keydown", (event) => 
-        {   
-            let xPos = 0;
-            let yPos = 0;
-            switch (event.key) {
-                case 'ArrowUp':
-                    yPos -= moveSpeed;
-                    break;
-                case 'ArrowDown':
-                    yPos += moveSpeed;
-                    break;
-                case 'ArrowLeft':
-                    xPos += moveSpeed;
-                    break;
-                case 'ArrowRight':
-                    xPos -= moveSpeed;
-                    break;
-            }
+    window.addEventListener("keydown", (event) => {
+        let xPos = 0;
+        let yPos = 0;
+        let zPos = 0;
+        switch (event.key) {
+            case 'ArrowUp':
+                yPos -= moveSpeed;
+                break;
+            case 'ArrowDown':
+                yPos += moveSpeed;
+                break;
+            case 'ArrowLeft':
+                xPos += moveSpeed;
+                break;
+            case 'ArrowRight':
+                xPos -= moveSpeed;
+                break;
+            case ' ':
+                toggleCamMovement();
+                break;
+            case '.':
+                zPos -= moveSpeed;
+                break;
+            case ',':
+                zPos+=moveSpeed;
+                break;
+        }
+        if(cameraMovementEnabled){
             moveCamera(xPos, yPos, 0);
         }
+        else{
+            if(currentChoice > 0){
+                shapes[currentChoice-1].translate([-xPos, -yPos, zPos]);
+            }
+            else{
+                shapes.forEach(shape => {
+                    shape.translate([-xPos, -yPos, zPos], true);
+                })
+            }
+        }
+    }
     )
 
     let isDragging = false;
@@ -192,17 +226,17 @@ window.onload = async () => {
         offsetX = event.clientX - canvas.getBoundingClientRect().left;
         offsetY = event.clientY - canvas.getBoundingClientRect().top;
     });
-    
+
     window.addEventListener('mouseup', () => {
         isDragging = false;
     });
-    
+
     window.addEventListener('mousemove', (event) => {
         if (isDragging) {
-        const xPos = (event.clientX - offsetX)/10000;
-        const yPos = (event.clientY - offsetY)/10000;
-    
-        moveCamera(xPos, yPos, 0);
+            const xPos = (event.clientX - offsetX) / 10000;
+            const yPos = (event.clientY - offsetY) / 10000;
+
+            moveCamera(xPos, yPos, 0);
         }
     });
 
@@ -231,26 +265,30 @@ function render(now) {
 
     shapes.forEach(shape => {
         /* --------- scale rotation amount by time difference --------- */
-        shape.rotate(1 * delta, [0, 1, 1]);
-        if(isChosen(shapes.indexOf(shape))){
+        //shape.rotate(1 * delta, [0, 1, 1]);
+        if (isChosen(shapes.indexOf(shape))) {
             shape.drawLCS();
         }
         shape.draw();
     });
-
-    if(currentChoice===0){
+    //shapes[1].rotate(1 * delta, [0, 0, 1], true);
+    if (currentChoice === 0) {
         wcs.draw();
     }
-    
+
     requestAnimationFrame(render)
 }
 
-function isChosen(index){ 
-    return index+1===currentChoice ? true : false;
+function isChosen(index) {
+    return index + 1 === currentChoice ? true : false;
 }
 
-function moveCamera(x, y, z){
-    mat4.translate(viewMatrix, viewMatrix, [x,y,z]);
+function moveCamera(x, y, z) {
+    mat4.translate(viewMatrix, viewMatrix, [x, y, z]);
+}
+
+function toggleCamMovement() {
+    cameraMovementEnabled = !cameraMovementEnabled;
 }
 
 

@@ -84,8 +84,15 @@ class Shape {
         }
     }
 
-    translate(vector) {
-        mat4.translate(this.modelMatrix, this.modelMatrix, vector);
+    translate(vector, global = false) {
+        if(!global){
+            mat4.translate(this.modelMatrix, this.modelMatrix, vector);
+        }
+        else{
+            const translationMatrix = mat4.create();
+            mat4.translate(translationMatrix, translationMatrix, vector);
+            mat4.mul(this.modelMatrix, translationMatrix, this.modelMatrix);
+        }
     }
 
     static setupAttribute(buffer, location) {
