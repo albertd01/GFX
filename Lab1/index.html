@@ -3,7 +3,25 @@
 
 <head>
     <meta charset="utf-8">
-    <title>WegGL Example</title>
+    <title>Lab1a</title>
+    <style>
+        #canvas-container {
+            position: relative;
+        }
+
+        #canvas {
+            border: 1px solid #000;
+        }
+
+        #controlPanel {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border: 1px solid #333;
+        }
+    </style>
 
     <script type="text/javascript" src="gl-matrix-min.js"></script>
     <script type="text/javascript" src="main.js"></script>
@@ -41,7 +59,16 @@
 </head>
 
 <body>
-    <canvas id="canvas" width="1800" height="900"></canvas>
+    <div id="canvas-container">
+        <canvas id="canvas" width="1800" height="800"></canvas>
+        <div id="controlPanel">
+            <div class="section">
+                <h2>Current state</h2>
+                <p>Camera Movement enabled: <span id = "cameraMovement"></span></p>
+                <p>Current choice: <span id = "choice"></span></p>
+            </div>
+        </div>
+    </div>
 </body>
 
 

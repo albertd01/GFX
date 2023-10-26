@@ -1,5 +1,3 @@
-
-
 const { mat4 } = glMatrix;
 const toRad = glMatrix.glMatrix.toRadian;
 
@@ -22,8 +20,6 @@ const locations = {
 const viewMatrix = mat4.create();
 
 window.onload = async () => {
-
-    /* --------- basic setup --------- */
     let canvas = document.getElementById("canvas");
     gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
 
@@ -34,51 +30,46 @@ window.onload = async () => {
     const program = createShaderProgram("v-shader", "f-shader");
     gl.useProgram(program);
 
-    /* --------- save attribute & uniform locations --------- */
     locations.attributes.vertexLocation = gl.getAttribLocation(program, "vertexPosition");
     locations.attributes.colorLocation = gl.getAttribLocation(program, "vertexColor");
     locations.uniforms.modelViewMatrix = gl.getUniformLocation(program, "modelViewMatrix");
     locations.uniforms.projectionMatrix = gl.getUniformLocation(program, "projectionMatrix");
 
-    /* --------- create & send projection matrix --------- */
     const projectionMatrix = mat4.create();
     mat4.perspective(projectionMatrix, toRad(45), canvas.clientWidth / canvas.clientHeight, 0.1, 100);
     gl.uniformMatrix4fv(locations.uniforms.projectionMatrix, gl.FALSE, projectionMatrix);
 
-    /* --------- create view matrix --------- */
     mat4.lookAt(viewMatrix, [0, 0, 2], [0, 0, 0], [0, 1, 0]);
 
-    /* --------- translate view matrix --------- */
-    //mat4.translate(viewMatrix, viewMatrix, [-0.5, 0.0, -0.5])
-    moveCamera(-0.5, 0.0, -0.5);
-
-    /* --------- create 9 shapes and translate them away from each other --------- */
     wcs = createWCS();
     shapes.push(createCube());
-    shapes[0].translate([0.5, 0, 0]);
+    shapes[0].translate([-1.5, 0.3, 0]);
 
     shapes.push(createSquareBasedPyramid());
-    shapes[1].translate([-0.5, 0, 0]);
+    shapes[1].translate([-1.1, 0.3, 0]);
 
     shapes.push(createHexPrism());
-    shapes[2].translate([0.0, 0.5, 0]);
+    shapes[2].translate([-0.6, 0.2, 0]);
 
     shapes.push(createCube());
-    shapes[3].translate([0.0, -0.5, 0]);
+    shapes[3].translate([-0.3, 0.3, 0]);
 
     shapes.push(createSquareBasedPyramid());
-    shapes[4].translate([-0.8, 0.0, 0]);
+    shapes[4].translate([0.1, 0.3, 0]);
 
     shapes.push(createHexPrism());
-    shapes[5].translate([0.8, 0.0, 0.0]);
+    shapes[5].translate([0.4, 0.2, 0.0]);
 
     shapes.push(createSquareBasedPyramid());
-    shapes[6].translate([1.1, 0.0, 0.0]);
+    shapes[6].translate([0.7, 0.3, 0.0]);
 
     shapes.push(createCube());
-    shapes[7].translate([1.4, 0.0, 0.0]);
+    shapes[7].translate([1.1, 0.3, 0.0]);
 
     shapes.push(createCube());
+    shapes[8].translate([1.6, 0.3, 0.0])
+
+    moveCamera(-0.3, -0.5, -0.5);
 
     window.addEventListener("keydown", (event) =>{
         axis = [1,1,1];
@@ -252,7 +243,6 @@ window.onload = async () => {
     /* --------- Load some data from external files - only works with an http server --------- */
     //  await loadSomething();
 
-    /* --------- start render loop --------- */
     requestAnimationFrame(render);
 }
 
@@ -265,7 +255,6 @@ async function loadSomething() {
 let then = 0;
 
 function render(now) {
-    /* --------- calculate time per frame in seconds --------- */
     let delta = now - then;
     delta *= 0.001;
     then = now;
@@ -273,18 +262,15 @@ function render(now) {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     shapes.forEach(shape => {
-        /* --------- scale rotation amount by time difference --------- */
-        //shape.rotate(1 * delta, [0, 1, 1]);
         if (isChosen(shapes.indexOf(shape))) {
             shape.drawLCS();
         }
         shape.draw();
     });
-    //shapes[1].rotate(1 * delta, [0, 0, 1], true);
     if (currentChoice === 0) {
         wcs.draw();
     }
-
+    updateControlPanel();
     requestAnimationFrame(render)
 }
 
@@ -300,4 +286,9 @@ function toggleCamMovement() {
     cameraMovementEnabled = !cameraMovementEnabled;
 }
 
+
+function updateControlPanel() {
+    document.getElementById("cameraMovement").textContent = cameraMovementEnabled;
+    document.getElementById("choice").textContent = currentChoice;
+}
 
