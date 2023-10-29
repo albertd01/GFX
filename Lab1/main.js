@@ -67,8 +67,12 @@ window.onload = async () => {
     shapes[7].translate([1.1, 0.3, 0.0]);
 
     shapes.push(createCube());
-    shapes[8].translate([1.6, 0.3, 0.0])
+    shapes[8].translate([1.6, 0.3, 0.0]);
 
+    const data = await loadSomething('bunny.obj');
+    shapes.push(createShapeGivenVerticesAndFaces(data.positions, data.faces));
+    shapes[9].scale([4.0,4.0,4.0]);
+    shapes[9].translate([0.0, 0.2, 0.0])
     moveCamera(-0.3, -0.5, -0.5);
 
     window.addEventListener("keydown", (event) =>{
@@ -240,16 +244,13 @@ window.onload = async () => {
         }
     });
 
-    /* --------- Load some data from external files - only works with an http server --------- */
-    //  await loadSomething();
-
     requestAnimationFrame(render);
 }
 
 /* --------- simple example of loading external files --------- */
-async function loadSomething() {
-    const data = await fetch('helpers.js').then(result => result.text());
-    console.log(data);
+async function loadSomething(path) {
+    const data = await fetch(path).then(result => result.text());
+    return parse(data);
 }
 
 let then = 0;
@@ -265,6 +266,7 @@ function render(now) {
         if (isChosen(shapes.indexOf(shape))) {
             shape.drawLCS();
         }
+        //shape.rotate(1*delta, [0,1,0]);
         shape.draw();
     });
     if (currentChoice === 0) {

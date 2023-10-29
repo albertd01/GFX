@@ -1,6 +1,4 @@
 function createCube(){
-    /* --------- define vertex positions & colors --------- */
-    /* -------------- 3 vertices per triangle ------------- */
     const vertices = [
         // X, Y, Z, W
         0.1, 0.1, 0.1, 1,
@@ -63,7 +61,6 @@ function createCube(){
 
     const colors = [];
 
-    /* --------- add one color per face, so 6 times for each color --------- */
     colorData.forEach(color => {
         for (let i = 0; i < 6; ++i) {
             colors.push(color);
@@ -117,8 +114,6 @@ function createSquareBasedPyramid(){
     ];
     
     const colors = [];
-
-    /* --------- add one color per face, so 6 times for each color --------- */
     
     for(let i = 0; i<6; ++i){
         colors.push(colorData[0]);
@@ -264,8 +259,6 @@ function createHexPrism(){
     ];
     const colors = [];
 
-    /* --------- add one color per face, so 6 times for each color --------- */
-
     for(let j=0; j<2; ++j) {
         for (let i = 0; i < 12; ++i) {
             colors.push(colorData[0]);
@@ -282,10 +275,28 @@ function createHexPrism(){
     
 }
 
-function createShape(vertices, colors){
+function createShapeGivenVerticesAndFaces(vertices, faces){
+    let colors = [];
+    let positions = [];
+    //console.log(vertices[0].x, faces[0].indices.length);
     
+    faces.forEach(face => {
+        const currentR = Math.random();
+        const currentG = Math.random();
+        const currentB = Math.random();
+        face.indices.forEach(index =>{
+            positions.push(vertices[index].x);
+            positions.push(vertices[index].y);
+            positions.push(vertices[index].z);
+            positions.push(1.0);
+            colors.push([currentR, currentG, currentB, 1.0]);
+        })
+    })
+    
+    return createShape(positions, colors);
+}
 
-    /* --------- create shape object and initialize data --------- */
+function createShape(vertices, colors){
     const shape = new Shape();
     shape.initData(vertices, colors)
     return shape;
@@ -296,3 +307,4 @@ function createCS(vertices, colors){
     cs.initData(vertices, colors);
     return cs;
 }
+
