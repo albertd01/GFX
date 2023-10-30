@@ -31,10 +31,10 @@ function parse(text) {
                 ));
                 break;
             case 'vn':
-                // You can handle vertex normals here if needed.
+                // handle normals here
                 break;
             case 'vt':
-                // You can handle texture coordinates here if needed.
+                // handle textures here
                 break;
             case 'f':
                 const faceIndices = elements.slice(1).map(indexStr => {
@@ -43,7 +43,6 @@ function parse(text) {
                 objFaces.push(new Face(faceIndices));
                 break;
             default:
-                // Handle other lines or comments here.
                 break;
         }
     }

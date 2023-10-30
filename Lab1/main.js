@@ -247,7 +247,6 @@ window.onload = async () => {
     requestAnimationFrame(render);
 }
 
-/* --------- simple example of loading external files --------- */
 async function loadSomething(path) {
     const data = await fetch(path).then(result => result.text());
     return parse(data);
@@ -266,7 +265,6 @@ function render(now) {
         if (isChosen(shapes.indexOf(shape))) {
             shape.drawLCS();
         }
-        //shape.rotate(1*delta, [0,1,0]);
         shape.draw();
     });
     if (currentChoice === 0) {

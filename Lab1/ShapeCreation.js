@@ -129,14 +129,14 @@ function createSquareBasedPyramid(){
 
 function createWCS(){
     const vertices = [
-        -20.0, 0.0, 0.0, 1.0, //x-direction
-        20.0, 0.0, 0.0, 1.0,
+        -30.0, 0.0, 0.0, 1.0, //x-direction
+        30.0, 0.0, 0.0, 1.0,
 
-        0.0, -20.0, 0.0, 1.0, //y-direction
-        0.0, 20.0, 0.0, 1.0, 
+        0.0, -30.0, 0.0, 1.0, //y-direction
+        0.0, 30.0, 0.0, 1.0, 
 
-        0.0, 0.0, -20.0, 1.0, //z-direction
-        0.0, 0.0, 20.0, 1.0,  
+        0.0, 0.0, -30.0, 1.0, //z-direction
+        0.0, 0.0, 30.0, 1.0,  
     ];
 
     const colorData = [
@@ -278,7 +278,6 @@ function createHexPrism(){
 function createShapeGivenVerticesAndFaces(vertices, faces){
     let colors = [];
     let positions = [];
-    //console.log(vertices[0].x, faces[0].indices.length);
     
     faces.forEach(face => {
         const currentR = Math.random();
