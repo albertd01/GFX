@@ -10,6 +10,7 @@
     <script type="text/javascript" src="ShaderProgram.js"></script>
     <script type="text/javascript" src="main.js"></script>
     <script type="text/javascript" src="Shape.js"></script>
+    <script type="text/javascript" src="CoordinateSystem.js"></script>
     <script type="text/javascript" src="ShapeCreation.js"></script>
     <script type="text/javascript" src="objectParser.js"></script>
     <script type="text/javascript" src="helpers.js"></script>    
@@ -29,7 +30,7 @@
             fragmentColor = vertexColor; 
         }
     </script>
-    <script id="v-shader" type="x-shader/x-vertex">
+    <script id="v-gouraudDiffuse" type="x-shader/x-vertex">
         precision mediump float;
 
         attribute vec4 vertexPosition; 

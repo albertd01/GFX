@@ -73,6 +73,12 @@ class Shape {
         }
     }
 
+    drawLCS(){
+        let lcs = createWCS();
+        lcs.setModelMatrix(this.modelMatrix);
+        lcs.draw();
+    }
+
     static setupAttribute(buffer, location, isNormal = false) {
         if (location === -1 || location === undefined) return;
 

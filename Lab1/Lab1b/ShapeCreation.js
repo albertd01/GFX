@@ -119,7 +119,37 @@ function createShape(vertices, colors, normals){
 
 function createCS(vertices, colors){
     const cs = new CoordinateSystem();
-    cs.initData(vertices, colors);
+    cs.initData(vertices, colors, []);
     return cs;
+}
+
+function createWCS(){
+    const vertices = [
+        -30.0, 0.0, 0.0, 1.0, //x-direction
+        30.0, 0.0, 0.0, 1.0,
+
+        0.0, -30.0, 0.0, 1.0, //y-direction
+        0.0, 30.0, 0.0, 1.0, 
+
+        0.0, 0.0, -30.0, 1.0, //z-direction
+        0.0, 0.0, 30.0, 1.0,  
+    ];
+
+    const colorData = [
+        [0.0, 0.0, 0.0, 1.0], //black
+        [1.0, 0.0, 0.0, 1.0], //red
+        [0.0, 0.0, 1.0, 1.0], //blue
+    ];
+
+    const colors = [];
+
+    colorData.forEach(color =>{
+        for(let i = 0; i<2 ; ++i){
+            colors.push(color);
+        }
+    })
+    
+
+    return createCS(vertices, colors);
 }
 

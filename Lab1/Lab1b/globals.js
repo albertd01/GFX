@@ -4,9 +4,13 @@ const toRad = glMatrix.glMatrix.toRadian;
 const shapes = [];
 let gl = null;
 
+let currentChoice = 0;
+let cameraMovementEnabled = true;
+let wcs = null;
+
 const shaders = {
     noLight: "v-shader-nolight",
-    withLight: "v-shader",
+    gouraudDiffuse: "v-gouraudDiffuse",
     fragment: "f-shader"
 }
 
@@ -27,7 +31,10 @@ const shaderInfo = {
 
 const shaderPrograms = {
     noLightProgram: null,
-    withLightProgram: null
+    gouraudDiffuse: null,
+    gouraudSpecular: null,
+    phongDiffuse: null,
+    phongSpecular: null
 }
 
 const matrices = {
