@@ -52,17 +52,3 @@ function parse(text) {
         faces: objFaces,
     };
 }
-
-class vertex {
-    constructor(x, y, z) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-    }
-}
-
-class face {
-    constructor(indices) {
-        this.indices = indices;
-    }
-}

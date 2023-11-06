@@ -20,7 +20,7 @@ class Shape {
         // flatten & convert data to 32 bit float arrays
         this.vertices = new Float32Array(vertices.flat());
         this.colors = new Float32Array(colors.flat());
-        this.normals = new Float32Array(normals.flat());
+        this.normals = new Float32Array(normals.flat()); 
 
         // send data to buffers
         gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers.vertexBuffer);
@@ -60,6 +60,17 @@ class Shape {
 
     translate(vector) {
         mat4.translate(this.transformationMatrix, this.transformationMatrix, vector);
+    }
+
+    scale(vector, global = false){
+        if(!global){
+            mat4.scale(this.transformationMatrix,this.transformationMatrix,vector);
+        }
+        else{
+            const scalingMatrix = mat4.create();
+            mat4.scale(scalingMatrix, scalingMatrix, vector);
+            mat4.mul(this.transformationMatrix, scalingMatrix, this.transformationMatrix);
+        }
     }
 
     static setupAttribute(buffer, location, isNormal = false) {
