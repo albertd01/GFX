@@ -1,4 +1,4 @@
-const { mat4, mat3 } = glMatrix;
+const { mat4, mat3, vec4 } = glMatrix;
 const toRad = glMatrix.glMatrix.toRadian;
 
 const shapes = [];
@@ -25,7 +25,8 @@ const shaderInfo = {
         modelViewMatrix: "modelViewMatrix",
         projectionMatrix: "projectionMatrix",
         viewMatrix: "viewMatrix",
-        normalMatrix: "normalMatrix"
+        normalMatrix: "normalMatrix",
+        lightPosition: "lightViewPosition"
     }
 }
 

@@ -23,39 +23,39 @@ window.onload = async () => {
     const sphere = await loadSomething('sphere_smooth.obj');
     const bunny = await loadSomething('bunny.obj');
     
-    shapes.push(createShapeGivenVerticesAndFaces(bunny));
+    shapes.push(smoothCreation(bunny));
     shapes[0].translate([-0.5, 0.5,0]);
     shapes[0].scale([2.0, 2.0, 2.0]);
 
-    shapes.push(createShapeGivenVerticesAndFaces(bunny));
+    shapes.push(smoothCreation(bunny));
     shapes[1].translate([0.0, 0.5, 0.0]);
     shapes[1].scale([2.0, 2.0, 2.0]);
 
-    shapes.push(createShapeGivenVerticesAndFaces(bunny));
+    shapes.push(smoothCreation(bunny));
     shapes[2].translate([0.5, 0.5, 0.0]);
     shapes[2].scale([2.0, 2.0, 2.0]);
 
-    shapes.push(createShapeGivenVerticesAndFaces(teapot));
+    shapes.push(smoothCreation(teapot));
     shapes[3].translate([-0.9,-0.2,0]);
     shapes[3].scale([0.4,0.4,0.4]);
 
-    shapes.push(createShapeGivenVerticesAndFaces(teapot));
+    shapes.push(smoothCreation(teapot));
     shapes[4].translate([0,-0.2,0]);
     shapes[4].scale([0.4,0.4,0.4]);
 
-    shapes.push(createShapeGivenVerticesAndFaces(teapot));
+    shapes.push(smoothCreation(teapot));
     shapes[5].translate([0.9,-0.2,0]);
     shapes[5].scale([0.4,0.4,0.4]);
 
-    shapes.push(createShapeGivenVerticesAndFaces(sphere));
+    shapes.push(smoothCreation(sphere));
     shapes[6].translate([-0.9, -0.5, 0]);
     shapes[6].scale([0.2,0.2,0.2]);
 
-    shapes.push(createShapeGivenVerticesAndFaces(sphere));
+    shapes.push(smoothCreation(sphere));
     shapes[7].translate([0, -0.5, 0]);
     shapes[7].scale([0.2,0.2,0.2]);
 
-    shapes.push(createShapeGivenVerticesAndFaces(sphere));
+    shapes.push(smoothCreation(sphere));
     shapes[8].translate([0.8, -0.5, 0]);
     shapes[8].scale([0.2,0.2,0.2]);
 
@@ -265,6 +265,10 @@ function render(now) {
     let delta = now - then;
     delta *= 0.001;
     then = now;
+
+    const lightPosition = vec4.fromValues(0, 0, 3, 1);
+    vec4.transformMat4(lightPosition, lightPosition, matrices.viewMatrix);
+    gl.uniform4fv(currentShaderProgram.uniforms.lightPosition, lightPosition);
 
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 

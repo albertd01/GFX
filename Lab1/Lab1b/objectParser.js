@@ -3,6 +3,7 @@ class Vertex {
         this.x = x;
         this.y = y;
         this.z = z;
+        this.normal = [0,0,0];
     }
 }
 
