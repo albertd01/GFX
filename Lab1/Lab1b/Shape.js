@@ -75,7 +75,7 @@ class Shape {
 
     drawLCS(){
         let lcs = createWCS();
-        lcs.setModelMatrix(this.modelMatrix);
+        lcs.setTransformationMatrix(this.transformationMatrix);
         lcs.draw();
     }
 
