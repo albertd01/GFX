@@ -11,6 +11,7 @@ let wcs = null;
 const shaders = {
     noLight: "v-shader-nolight",
     gouraudDiffuse: "v-gouraudDiffuse",
+    gouraudSpecular: "v-gouraudSpecular",
     fragment: "f-shader"
 }
 

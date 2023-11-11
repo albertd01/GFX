@@ -14,6 +14,7 @@ window.onload = async () => {
     // create shader programs and enable one of them
     shaderPrograms.noLightProgram = new ShaderProgram(shaders.noLight, shaders.fragment, shaderInfo);
     shaderPrograms.gouraudDiffuse = new ShaderProgram(shaders.gouraudDiffuse, shaders.fragment, shaderInfo);
+    shaderPrograms.gouraudSpecular = new ShaderProgram(shaders.gouraudSpecular, shaders.fragment, shaderInfo);
     shaderPrograms.noLightProgram.enable();
 
     wcs = createWCS();
@@ -23,7 +24,7 @@ window.onload = async () => {
     const sphere = await loadSomething('sphere_smooth.obj');
     const bunny = await loadSomething('bunny.obj');
     
-    shapes.push(smoothCreation(bunny));
+    shapes.push(createShapeGivenVerticesAndFaces(bunny));
     shapes[0].translate([-0.5, 0.5,0]);
     shapes[0].scale([2.0, 2.0, 2.0]);
 
@@ -35,7 +36,7 @@ window.onload = async () => {
     shapes[2].translate([0.5, 0.5, 0.0]);
     shapes[2].scale([2.0, 2.0, 2.0]);
 
-    shapes.push(smoothCreation(teapot));
+    shapes.push(createShapeGivenVerticesAndFaces(teapot));
     shapes[3].translate([-0.9,-0.2,0]);
     shapes[3].scale([0.4,0.4,0.4]);
 
@@ -47,7 +48,7 @@ window.onload = async () => {
     shapes[5].translate([0.9,-0.2,0]);
     shapes[5].scale([0.4,0.4,0.4]);
 
-    shapes.push(smoothCreation(sphere));
+    shapes.push(createShapeGivenVerticesAndFaces(sphere));
     shapes[6].translate([-0.9, -0.5, 0]);
     shapes[6].scale([0.2,0.2,0.2]);
 
@@ -60,7 +61,6 @@ window.onload = async () => {
     shapes[8].scale([0.2,0.2,0.2]);
 
     
-    // Attach event listener for keyboard events to the window
     window.addEventListener("keydown", (event) => {
 
         switch(event.key){
@@ -70,10 +70,11 @@ window.onload = async () => {
                 break;
             case 'e':
                 console.log("switching to Gouraud/specular");
-                shaderPrograms.noLightProgram.enable();
+                shaderPrograms.gouraudSpecular.enable();
                 break;
             case 'r':
                 console.log("switching to Phong/diffuse");
+                shaderPrograms.noLightProgram.enable();
                 break;
             case 't':
                 console.log("switching to Phong/specular");
