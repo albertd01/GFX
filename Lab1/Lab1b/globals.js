@@ -12,7 +12,10 @@ const shaders = {
     noLight: "v-shader-nolight",
     gouraudDiffuse: "v-gouraudDiffuse",
     gouraudSpecular: "v-gouraudSpecular",
-    fragment: "f-shader"
+    phongVertex: "v-phong",
+    phongFragmentSpecular: "f-phong-specular",
+    phongFragmentDiffuse: "f-phong-diffuse",
+    gouraudFragment: "f-shader"
 }
 
 let currentShaderProgram = null;
@@ -27,7 +30,7 @@ const shaderInfo = {
         projectionMatrix: "projectionMatrix",
         viewMatrix: "viewMatrix",
         normalMatrix: "normalMatrix",
-        lightPosition: "lightViewPosition"
+        lightPosition: "lightViewPosition",
     }
 }
 

@@ -12,9 +12,11 @@ window.onload = async () => {
     mat4.lookAt(matrices.viewMatrix, [0, 0, 2], [0, 0, 0], [0, 1, 0]);
 
     // create shader programs and enable one of them
-    shaderPrograms.noLightProgram = new ShaderProgram(shaders.noLight, shaders.fragment, shaderInfo);
-    shaderPrograms.gouraudDiffuse = new ShaderProgram(shaders.gouraudDiffuse, shaders.fragment, shaderInfo);
-    shaderPrograms.gouraudSpecular = new ShaderProgram(shaders.gouraudSpecular, shaders.fragment, shaderInfo);
+    shaderPrograms.noLightProgram = new ShaderProgram(shaders.noLight, shaders.gouraudFragment, shaderInfo);
+    shaderPrograms.gouraudDiffuse = new ShaderProgram(shaders.gouraudDiffuse, shaders.gouraudFragment, shaderInfo);
+    shaderPrograms.gouraudSpecular = new ShaderProgram(shaders.gouraudSpecular, shaders.gouraudFragment, shaderInfo);
+    shaderPrograms.phongSpecular = new ShaderProgram(shaders.phongVertex, shaders.phongFragmentSpecular, shaderInfo);
+    shaderPrograms.phongDiffuse = new ShaderProgram(shaders.phongVertex, shaders.phongFragmentDiffuse, shaderInfo);
     shaderPrograms.noLightProgram.enable();
 
     wcs = createWCS();
@@ -24,7 +26,7 @@ window.onload = async () => {
     const sphere = await loadSomething('sphere_smooth.obj');
     const bunny = await loadSomething('bunny.obj');
     
-    shapes.push(createShapeGivenVerticesAndFaces(bunny));
+    shapes.push(smoothCreation(bunny));
     shapes[0].translate([-0.5, 0.5,0]);
     shapes[0].scale([2.0, 2.0, 2.0]);
 
@@ -36,7 +38,7 @@ window.onload = async () => {
     shapes[2].translate([0.5, 0.5, 0.0]);
     shapes[2].scale([2.0, 2.0, 2.0]);
 
-    shapes.push(createShapeGivenVerticesAndFaces(teapot));
+    shapes.push(smoothCreation(teapot));
     shapes[3].translate([-0.9,-0.2,0]);
     shapes[3].scale([0.4,0.4,0.4]);
 
@@ -48,7 +50,7 @@ window.onload = async () => {
     shapes[5].translate([0.9,-0.2,0]);
     shapes[5].scale([0.4,0.4,0.4]);
 
-    shapes.push(createShapeGivenVerticesAndFaces(sphere));
+    shapes.push(smoothCreation(sphere));
     shapes[6].translate([-0.9, -0.5, 0]);
     shapes[6].scale([0.2,0.2,0.2]);
 
@@ -74,10 +76,11 @@ window.onload = async () => {
                 break;
             case 'r':
                 console.log("switching to Phong/diffuse");
-                shaderPrograms.noLightProgram.enable();
+                shaderPrograms.phongDiffuse.enable();
                 break;
             case 't':
                 console.log("switching to Phong/specular");
+                shaderPrograms.phongSpecular.enable();
                 break;
         }
     })
