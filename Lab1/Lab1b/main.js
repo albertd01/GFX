@@ -26,7 +26,7 @@ window.onload = async () => {
     const sphere = await loadSomething('sphere_smooth.obj');
     const bunny = await loadSomething('bunny.obj');
     
-    shapes.push(smoothCreation(bunny));
+    shapes.push(flatCreation(bunny));
     shapes[0].translate([-0.5, 0.5,0]);
     shapes[0].scale([2.0, 2.0, 2.0]);
 
@@ -38,7 +38,7 @@ window.onload = async () => {
     shapes[2].translate([0.5, 0.5, 0.0]);
     shapes[2].scale([2.0, 2.0, 2.0]);
 
-    shapes.push(smoothCreation(teapot));
+    shapes.push(flatCreation(teapot));
     shapes[3].translate([-0.9,-0.2,0]);
     shapes[3].scale([0.4,0.4,0.4]);
 
@@ -50,7 +50,7 @@ window.onload = async () => {
     shapes[5].translate([0.9,-0.2,0]);
     shapes[5].scale([0.4,0.4,0.4]);
 
-    shapes.push(smoothCreation(sphere));
+    shapes.push(flatCreation(sphere));
     shapes[6].translate([-0.9, -0.5, 0]);
     shapes[6].scale([0.2,0.2,0.2]);
 

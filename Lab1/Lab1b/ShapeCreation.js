@@ -90,7 +90,7 @@ function createCube() {
 }
 
 
-function createShapeGivenVerticesAndFaces(faces){
+function flatCreation(faces){
     const currentR = Math.random();
     const currentG = Math.random();
     const currentB = Math.random();
