@@ -74,6 +74,95 @@
             gl_FragColor = fragmentColor;
         }
     </script>
+    
+    <script id="v-phong" type="x-shader/x-vertex">
+        precision mediump float;
+    
+        attribute vec4 vertexPosition; 
+        attribute vec4 vertexColor;    
+        attribute vec3 vertexNormal;
+    
+        uniform mat4 modelViewMatrix;
+        uniform mat4 projectionMatrix;
+        uniform mat3 normalMatrix;
+
+        uniform vec4 lightViewPosition;
+
+        varying vec4 vColor;    
+        varying vec3 transformedNormal;
+        varying vec3 vViewDir;
+        varying vec3 lightVector;
+    
+        void main() {
+            // Transform vertex position to view space
+            vec4 viewPosition = modelViewMatrix * vertexPosition;
+            
+            transformedNormal = normalize(normalMatrix * vertexNormal);
+            vViewDir = normalize(-viewPosition.xyz);
+            
+            gl_Position = projectionMatrix * viewPosition; 
+            vColor = vertexColor;
+
+            lightVector = normalize(lightViewPosition.xyz - viewPosition.xyz);;
+        }
+    </script>
+    <script id="f-phong-diffuse" type="x-shader/x-fragment">
+        precision mediump float;
+    
+        varying vec4 vColor;    
+        varying vec3 transformedNormal;
+        varying vec3 vViewDir;
+    
+        varying vec3 lightVector;
+
+        uniform vec3 lightColor;
+    
+        void main() {
+            
+    
+            // Diffuse reflection
+            float diffuseComponent = max(dot(lightVector, transformedNormal), 0.0);
+            //ambient lighting
+            float ambientComponent = 0.5;
+            //total lighting
+            float lightIntensity = diffuseComponent;
+
+            // Final color
+            vec3 result = vColor.xyz * (lightIntensity);
+    
+            gl_FragColor = vec4(result, vColor.a);
+        }
+    </script>
+    <script id="f-phong-specular" type="x-shader/x-fragment">
+        precision mediump float;
+    
+        varying vec4 vColor;    
+        varying vec3 transformedNormal;
+        varying vec3 vViewDir;
+
+        varying vec3 lightVector;
+    
+        uniform vec3 lightColor;
+    
+        void main() {
+            float ambient = 1.0;
+    
+            // Diffuse reflection
+            float diffuseIntensity = max(dot(lightVector, transformedNormal), 0.0);
+    
+            // Specular reflection
+            vec3 reflectDir = reflect(-lightVector, transformedNormal);
+            float specularIntensity = pow(max(dot(reflectDir, vViewDir), 0.0), 8.0);
+    
+            // Combine diffuse and specular contributions
+            float totalIntensity = ambient + diffuseIntensity + specularIntensity;
+    
+            // Final color
+            vec3 result = vColor.xyz * totalIntensity;
+    
+            gl_FragColor = vec4(result, vColor.a);
+        }
+    </script>
     <script id="v-gouraudSpecular" type="x-shader/x-vertex">
         precision mediump float;
     
@@ -102,6 +191,8 @@
             // Calculate light intensity 
             // This can be negative, so just make negative values 0
             float diffuseIntensity = max(dot(lightVector, transformedNormal), 0.0);
+
+            float ambient = 1.0;
     
             // Calculate view direction
             vec3 viewDirection = normalize(-viewPosition.xyz);
@@ -112,7 +203,7 @@
             // Calculate specular intensity using the Phong model
             float specularIntensity = pow(max(dot(reflectionVector, viewDirection), 0.0), 8.0); 
             
-            float totalIntensity = diffuseIntensity + specularIntensity;
+            float totalIntensity =  diffuseIntensity + specularIntensity;
     
             gl_Position = projectionMatrix * viewPosition; 
     
@@ -123,91 +214,7 @@
             fragmentColor.a = 1.0; 
         }
     </script>
-    <script id="v-phong" type="x-shader/x-vertex">
-        precision mediump float;
     
-        attribute vec4 vertexPosition; 
-        attribute vec4 vertexColor;    
-        attribute vec3 vertexNormal;
-    
-        uniform mat4 modelViewMatrix;
-        uniform mat4 projectionMatrix;
-        uniform mat3 normalMatrix;
-
-        varying vec4 vColor;    
-        varying vec3 vNormal;
-        varying vec3 vViewDir;
-    
-        void main() {
-            // Transform vertex position to view space
-            vec4 viewPosition = modelViewMatrix * vertexPosition;
-            
-            vNormal = normalize(normalMatrix * vertexNormal);
-            vViewDir = normalize(-viewPosition.xyz);
-            
-            gl_Position = projectionMatrix * viewPosition; 
-            vColor = vertexColor;
-        }
-    </script>
-    <script id="f-phong-diffuse" type="x-shader/x-fragment">
-        precision mediump float;
-    
-        varying vec4 vColor;    
-        varying vec3 vNormal;
-        varying vec3 vViewDir;
-    
-        uniform vec4 lightViewPosition;
-        uniform vec3 lightColor;
-    
-        void main() {
-            vec3 lightVector = normalize(lightViewPosition.xyz - gl_FragCoord.xyz);
-    
-            // Diffuse reflection
-            float diffuseComponent = max(dot(lightVector, vNormal), 0.0);
-            //ambient lighting
-            float ambientComponent = 1.0;
-            //total lighting
-            float lightIntensity = ambientComponent + diffuseComponent;
-
-            // Final color
-            vec3 result = vColor.xyz * (lightIntensity);
-    
-            gl_FragColor = vec4(result, vColor.a);
-        }
-    </script>
-    <script id="f-phong-specular" type="x-shader/x-fragment">
-        precision mediump float;
-    
-        varying vec4 vColor;    
-        varying vec3 vNormal;
-        varying vec3 vViewDir;
-    
-        uniform vec4 lightViewPosition;
-        uniform vec3 lightColor;
-    
-        void main() {
-            vec3 lightDir = normalize(lightViewPosition.xyz - gl_FragCoord.xyz);
-            vec3 normal = normalize(vNormal);
-            vec3 viewDirection = normalize(vViewDir);
-
-            float ambient = 1.0;
-    
-            // Diffuse reflection
-            float diffuseIntensity = max(dot(normal, lightDir), 0.0);
-    
-            // Specular reflection
-            vec3 reflectDir = reflect(-lightDir, normal);
-            float specularIntensity = pow(max(dot(reflectDir, viewDirection), 0.0), 8.0);
-    
-            // Combine diffuse and specular contributions
-            float totalIntensity = ambient + diffuseIntensity + specularIntensity;;
-    
-            // Final color
-            vec3 result = vColor.xyz * totalIntensity;
-    
-            gl_FragColor = vec4(result, vColor.a);
-        }
-    </script>
 </head>
 
 <body>
