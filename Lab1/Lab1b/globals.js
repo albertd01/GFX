@@ -1,4 +1,4 @@
-const { mat4, mat3, vec4 } = glMatrix;
+const { mat4, mat3, vec3,vec4 } = glMatrix;
 const toRad = glMatrix.glMatrix.toRadian;
 
 const shapes = [];
@@ -7,6 +7,9 @@ let gl = null;
 let currentChoice = 0;
 let cameraMovementEnabled = true;
 let wcs = null;
+
+let lightMovementEnabled = false;
+const lightPosition = vec4.fromValues(0,10,0,1);
 
 const shaders = {
     noLight: "v-shader-nolight",

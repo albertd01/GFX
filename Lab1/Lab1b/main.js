@@ -17,7 +17,7 @@ window.onload = async () => {
     shaderPrograms.gouraudSpecular = new ShaderProgram(shaders.gouraudSpecular, shaders.gouraudFragment, shaderInfo);
     shaderPrograms.phongSpecular = new ShaderProgram(shaders.phongVertex, shaders.phongFragmentSpecular, shaderInfo);
     shaderPrograms.phongDiffuse = new ShaderProgram(shaders.phongVertex, shaders.phongFragmentDiffuse, shaderInfo);
-    shaderPrograms.noLightProgram.enable();
+    shaderPrograms.phongSpecular.enable();
 
     wcs = createWCS();
 
@@ -26,7 +26,7 @@ window.onload = async () => {
     const sphere = await loadSomething('sphere_smooth.obj');
     const bunny = await loadSomething('bunny.obj');
     
-    shapes.push(flatCreation(bunny));
+    shapes.push(smoothCreation(bunny));
     shapes[0].translate([-0.5, 0.5,0]);
     shapes[0].scale([2.0, 2.0, 2.0]);
 
@@ -38,7 +38,7 @@ window.onload = async () => {
     shapes[2].translate([0.5, 0.5, 0.0]);
     shapes[2].scale([2.0, 2.0, 2.0]);
 
-    shapes.push(flatCreation(teapot));
+    shapes.push(smoothCreation(teapot));
     shapes[3].translate([-0.9,-0.2,0]);
     shapes[3].scale([0.4,0.4,0.4]);
 
@@ -50,7 +50,7 @@ window.onload = async () => {
     shapes[5].translate([0.9,-0.2,0]);
     shapes[5].scale([0.4,0.4,0.4]);
 
-    shapes.push(flatCreation(sphere));
+    shapes.push(smoothCreation(sphere));
     shapes[6].translate([-0.9, -0.5, 0]);
     shapes[6].scale([0.2,0.2,0.2]);
 
@@ -107,13 +107,18 @@ window.onload = async () => {
                 axis = [0, 0, 1];
                 break;
         }
-        if(currentChoice === 0){
-            shapes.forEach(shape => {
-                shape.rotate(0.1, axis, true);
-            })
+        if(lightMovementEnabled){
+            rotateLight(axis);
         }
         else{
-            shapes[currentChoice-1].rotate(0.1, axis);
+            if(currentChoice === 0){
+                shapes.forEach(shape => {
+                    shape.rotate(0.1, axis, true);
+                })
+            }
+            else{
+                shapes[currentChoice-1].rotate(0.1, axis);
+            }
         }
     }
     )
@@ -182,6 +187,13 @@ window.onload = async () => {
             case '9':
                 currentChoice = 9;
                 break;
+            case ' ':
+                toggleCamMovement();
+                break;
+            case 'L':
+                lightMovementEnabled=!lightMovementEnabled;
+                console.log("light movement " + lightMovementEnabled);
+                break;
         }
     }
     )
@@ -204,9 +216,6 @@ window.onload = async () => {
             case 'ArrowRight':
                 xPos -= moveSpeed;
                 break;
-            case ' ':
-                toggleCamMovement();
-                break;
             case '.':
                 zPos -= moveSpeed;
                 break;
@@ -214,17 +223,24 @@ window.onload = async () => {
                 zPos+=moveSpeed;
                 break;
         }
-        if(cameraMovementEnabled){
-            moveCamera(xPos, yPos, 0);
+        if(lightMovementEnabled){
+            lightPosition[0] += xPos*10;
+            lightPosition[1] += yPos*10;
+            lightPosition[2] += zPos*10;
         }
         else{
-            if(currentChoice > 0){
-                shapes[currentChoice-1].translate([-xPos, -yPos, zPos]);
+            if(cameraMovementEnabled){
+                moveCamera(xPos, yPos, 0);
             }
             else{
-                shapes.forEach(shape => {
-                    shape.translate([-xPos, -yPos, zPos], true);
-                })
+                if(currentChoice > 0){
+                    shapes[currentChoice-1].translate([-xPos, -yPos, zPos]);
+                }
+                else{
+                    shapes.forEach(shape => {
+                        shape.translate([-xPos, -yPos, zPos], true);
+                    })
+                }
             }
         }
     }
@@ -269,10 +285,10 @@ function render(now) {
     let delta = now - then;
     delta *= 0.001;
     then = now;
+    const currentlightPosition = vec4.fromValues(lightPosition[0], lightPosition[1], lightPosition[2], 1);
 
-    const lightPosition = vec4.fromValues(0, 0, 3, 1);
-    vec4.transformMat4(lightPosition, lightPosition, matrices.viewMatrix);
-    gl.uniform4fv(currentShaderProgram.uniforms.lightPosition, lightPosition);
+    vec4.transformMat4(currentlightPosition, currentlightPosition, matrices.viewMatrix);
+    gl.uniform4fv(currentShaderProgram.uniforms.lightPosition, currentlightPosition);
 
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
@@ -294,6 +310,7 @@ function moveCamera(x, y, z) {
     mat4.translate(matrices.viewMatrix, matrices.viewMatrix, [x, y, z]);
 }
 
+
 function isChosen(index) {
     return index + 1 === currentChoice ? true : false;
 }
@@ -301,4 +318,23 @@ function isChosen(index) {
 function toggleCamMovement() {
     cameraMovementEnabled = !cameraMovementEnabled;
 }
+
+function rotateLight(axis){
+    let newPositions = vec3.fromValues(lightPosition[0], lightPosition[1], lightPosition[2]);
+    if(axis[0]){
+        vec3.rotateX(newPositions, newPositions, vec3.fromValues(0,0,0), 0.1*axis[0]);
+    }
+    if(axis[1]){
+        vec3.rotateY(newPositions, newPositions, vec3.fromValues(0,0,0), 0.1*axis[1]);
+    }
+    if(axis[2]){
+        vec3.rotateZ(newPositions, newPositions, vec3.fromValues(0,0,0), 0.1*axis[2]);
+    }
+
+    lightPosition[0] = newPositions[0];
+    lightPosition[1] = newPositions[1];
+    lightPosition[2] = newPositions[2];
+}
+
+
 

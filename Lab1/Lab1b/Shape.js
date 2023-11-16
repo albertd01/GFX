@@ -54,12 +54,26 @@ class Shape {
         gl.drawArrays(gl.TRIANGLES, 0, this.vertices.length / 4);
     }
 
-    rotate(angle, axis) {
-        mat4.rotate(this.transformationMatrix, this.transformationMatrix, angle, axis);
+    rotate(angle, axis, global = false) {
+        if(!global){
+            mat4.rotate(this.transformationMatrix, this.transformationMatrix, angle, axis);
+        }
+        else {
+            const rotationMatrix = mat4.create();
+            mat4.rotate(rotationMatrix, rotationMatrix, angle, axis);
+            mat4.mul(this.transformationMatrix, rotationMatrix, this.transformationMatrix)
+        }
     }
 
-    translate(vector) {
-        mat4.translate(this.transformationMatrix, this.transformationMatrix, vector);
+    translate(vector, global = false) {
+        if(!global){
+            mat4.translate(this.transformationMatrix, this.transformationMatrix, vector);
+        }
+        else{
+            const translationMatrix = mat4.create();
+            mat4.translate(translationMatrix, translationMatrix, vector);
+            mat4.mul(this.transformationMatrix, translationMatrix, this.transformationMatrix);
+        }
     }
 
     scale(vector, global = false){
