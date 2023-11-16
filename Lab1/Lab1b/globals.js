@@ -34,6 +34,8 @@ const shaderInfo = {
         viewMatrix: "viewMatrix",
         normalMatrix: "normalMatrix",
         lightPosition: "lightViewPosition",
+        roughness: "roughness", //for cookeTorrance
+        metallic: "metallic", //for cookeTorrance
     }
 }
 
@@ -48,4 +50,9 @@ const shaderPrograms = {
 const matrices = {
     viewMatrix: mat4.create(),
     projectionMatrix: mat4.create(),
+}
+
+const cookeTorranceConstants = {
+    roughness : 1.0,
+    metallic : 1.0,
 }
