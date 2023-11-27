@@ -17,16 +17,15 @@ window.onload = async () => {
     shaderPrograms.gouraudSpecular = new ShaderProgram(shaders.gouraudSpecular, shaders.gouraudFragment, shaderInfo);
     shaderPrograms.phongSpecular = new ShaderProgram(shaders.phongVertex, shaders.phongFragmentSpecular, shaderInfo);
     shaderPrograms.phongDiffuse = new ShaderProgram(shaders.phongVertex, shaders.phongFragmentDiffuse, shaderInfo);
-    shaderPrograms.phongSpecular.enable();
+    shaderPrograms.noLightProgram.enable();
 
     wcs = createWCS();
-
     
     const teapot = await loadSomething('teapot.obj');
     const sphere = await loadSomething('sphere_smooth.obj');
     const bunny = await loadSomething('bunny.obj');
     
-    shapes.push(smoothCreation(bunny));
+    shapes.push(smoothCreationV2(bunny));
     shapes[0].translate([-0.5, 0.5,0]);
     shapes[0].scale([2.0, 2.0, 2.0]);
 
@@ -38,7 +37,7 @@ window.onload = async () => {
     shapes[2].translate([0.5, 0.5, 0.0]);
     shapes[2].scale([2.0, 2.0, 2.0]);
 
-    shapes.push(smoothCreation(teapot));
+    shapes.push(smoothCreationV2(teapot));
     shapes[3].translate([-0.9,-0.2,0]);
     shapes[3].scale([0.4,0.4,0.4]);
 
@@ -50,7 +49,7 @@ window.onload = async () => {
     shapes[5].translate([0.9,-0.2,0]);
     shapes[5].scale([0.4,0.4,0.4]);
 
-    shapes.push(smoothCreation(sphere));
+    shapes.push(smoothCreationV2(sphere));
     shapes[6].translate([-0.9, -0.5, 0]);
     shapes[6].scale([0.2,0.2,0.2]);
 
@@ -296,8 +295,6 @@ function render(now) {
         if (isChosen(shapes.indexOf(shape))) {
             shape.drawLCS();
         }
-        // scale rotation amount by time difference
-        //shape.rotate(1 * delta, [0, 1, 1]);
         shape.draw();
     });
     if(currentChoice === 0){

@@ -30,6 +30,15 @@
             fragmentColor = vertexColor; 
         }
     </script>
+    <script id="f-shader" type="x-shader/x-fragment">
+        precision mediump float;
+
+        varying vec4 fragmentColor;
+
+        void main() {
+            gl_FragColor = fragmentColor;
+        }
+    </script>
     <script id="v-gouraudDiffuse" type="x-shader/x-vertex">
         precision mediump float;
 
@@ -65,15 +74,7 @@
             fragmentColor.a = 1.0; 
         }
     </script>
-    <script id="f-shader" type="x-shader/x-fragment">
-        precision mediump float;
-
-        varying vec4 fragmentColor;
-
-        void main() {
-            gl_FragColor = fragmentColor;
-        }
-    </script>
+    
     
     <script id="v-phong" type="x-shader/x-vertex">
         precision mediump float;
@@ -97,7 +98,7 @@
             // Transform vertex position to view space
             vec4 viewPosition = modelViewMatrix * vertexPosition;
             
-            transformedNormal = normalize(normalMatrix * vertexNormal);
+            transformedNormal = normalize(normalMatrix * normalize(vertexNormal));
             viewDirection = normalize(-viewPosition.xyz);
             
             gl_Position = projectionMatrix * viewPosition; 
@@ -121,7 +122,6 @@
     
             // Diffuse reflection
             float diffuseComponent = max(dot(lightVector, transformedNormal), 0.0);
-            //ambient lighting
             
             // Final color
             vec3 result = vColor.xyz * (diffuseComponent);
@@ -148,7 +148,7 @@
     
             // Specular reflection
             vec3 reflectionVector = reflect(-normalize(lightVector), normalize(transformedNormal));
-            float specularIntensity = pow(max(dot(reflectionVector, viewDirection), 0.0), 8.0);
+            float specularIntensity = pow(max(dot(reflectionVector, viewDirection), 0.0), 60.0);
     
             // Combine diffuse and specular contributions
             float totalIntensity = 0.2 + diffuseIntensity + specularIntensity;
@@ -182,31 +182,23 @@
             vec3 lightVector = normalize(lightViewPosition.xyz - viewPosition.xyz);
             
             // Transform and normalize the normal
-            vec3 transformedNormal = normalize(normalMatrix * vertexNormal);
+            vec3 transformedNormal = normalize(normalMatrix * normalize(vertexNormal));
     
             // Calculate light intensity 
             // This can be negative, so just make negative values 0
             float diffuseIntensity = max(dot(lightVector, transformedNormal), 0.0);
 
-            float ambient = 1.0;
-    
-            // Calculate view direction
             vec3 viewDirection = normalize(-viewPosition.xyz);
-            
-            // Calculate reflection vector for specular reflection
+
             vec3 reflectionVector = reflect(-lightVector, transformedNormal);
-    
-            // Calculate specular intensity using the Phong model
             float specularIntensity = pow(max(dot(reflectionVector, viewDirection), 0.0), 8.0); 
             
             float totalIntensity =  0.2 + diffuseIntensity + specularIntensity;
     
             gl_Position = projectionMatrix * viewPosition; 
     
-            // Multiply vertex color with totalIntensity
             fragmentColor = vertexColor * totalIntensity;
-    
-            // Set alpha value to 1 again
+
             fragmentColor.a = 1.0; 
         }
     </script>

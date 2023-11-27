@@ -1,6 +1,0 @@
-refactor light transformations into separate file/class
-
-implement cooke torrance illumination model
-
-maybe refactor architecture (object interface, drawable interface)
-
