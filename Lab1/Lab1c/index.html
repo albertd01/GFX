@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>WegGL Example</title>
+
+    <script type="text/javascript" src="gl-matrix-min.js"></script>
+    <script type="text/javascript" src="globals.js"></script>
+    <script type="text/javascript" src="ShaderProgram.js"></script>
+    <script type="text/javascript" src="main.js"></script>
+    <script type="text/javascript" src="Shape.js"></script>
+    <script type="text/javascript" src="CoordinateSystem.js"></script>
+    <script type="text/javascript" src="ShapeCreation.js"></script>
+    <script type="text/javascript" src="objectParser.js"></script>
+    <script type="text/javascript" src="helpers.js"></script>  
+    <script type="text/javascript" src="Camera.js"></script>   
+    <script type="text/javascript" src="Light.js"></script>  
+    <script type="text/javascript" src="GameArena.js"></script>   
+    <script id="v-phong" type="x-shader/x-vertex">
+        precision mediump float;
+    
+        attribute vec4 vertexPosition; 
+        attribute vec4 vertexColor;    
+        attribute vec3 vertexNormal;
+    
+        uniform mat4 modelViewMatrix;
+        uniform mat4 projectionMatrix;
+        uniform mat3 normalMatrix;
+
+        uniform vec4 lightViewPosition;
+
+        varying vec4 vColor;    
+        varying vec3 transformedNormal;
+        varying vec3 viewDirection;
+        varying vec3 lightVector;
+    
+        void main() {
+            // Transform vertex position to view space
+            vec4 viewPosition = modelViewMatrix * vertexPosition;
+            
+            transformedNormal = normalize(normalMatrix * normalize(vertexNormal));
+            viewDirection = normalize(-viewPosition.xyz);
+            
+            gl_Position = projectionMatrix * viewPosition; 
+            vColor = vertexColor;
+
+            lightVector = normalize(lightViewPosition.xyz - viewPosition.xyz);;
+        }
+    </script>
+    <script id="f-phong-specular" type="x-shader/x-fragment">
+        precision mediump float;
+    
+        varying vec4 vColor;    
+        varying vec3 transformedNormal;
+        varying vec3 viewDirection;
+
+        varying vec3 lightVector;
+    
+        uniform vec3 lightColor;
+    
+        void main() {
+            float ambient = 1.0;
+    
+            // Diffuse reflection
+            float diffuseIntensity = max(dot(normalize(lightVector), normalize(transformedNormal)), 0.0);
+    
+            // Specular reflection
+            vec3 reflectionVector = reflect(-normalize(lightVector), normalize(transformedNormal));
+            float specularIntensity = pow(max(dot(reflectionVector, viewDirection), 0.0), 60.0);
+    
+            // Combine diffuse and specular contributions
+            float totalIntensity = 0.2 + diffuseIntensity + specularIntensity;
+    
+            // Final color
+            vec3 result = vColor.xyz * totalIntensity;
+    
+            gl_FragColor = vec4(result, vColor.a);
+        }
+    </script>
+</head>
+
+<body>
+    <canvas id="canvas" width="1800" height="900"></canvas>
+</body>
+
+</html>
