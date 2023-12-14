@@ -8,7 +8,7 @@ window.onload = async () => {
     gl.clearColor(0.729, 0.764, 0.674, 1);
 
     camera = new Camera([10,-4, 32], [10, 10, 0], [0, 1, 0]);
-    light = new Light([3, 3, 10]);
+    light = new Light([5, 5, 20]);
 
     // calculate view and projection matrix
     mat4.perspective(matrices.projectionMatrix, toRad(30), canvas.clientWidth / canvas.clientHeight, 0.1, 100);
@@ -20,17 +20,23 @@ window.onload = async () => {
 
     wcs = createWCS();
 
-    const maze = await loadSomething('mazefinal.obj');
     const sphere = await loadSomething('sphere_smooth.obj');
+    const hemisphere = await loadSomething('hemisphere_with_normals.obj');
 
-    //shapes.push(mazeCreation(maze));
-    //shapes[0].rotate(0.3, [1, 0, 0], true);
-    //shapes[0].scale([0.1,0.1,0.1]);
 
-    pacman = smoothCreationV2(sphere, [1.0, 1.0, 0.0, 1.0]);
-    pacman.translate([0,0,1.5])
-    pacman.scale([0.5, 0.5, 0.5]);
-    shapes.push(pacman);
+    
+    const upperbody = smoothCreationV2(hemisphere, [1.0,1.0,0.0,1.0]);
+    const lowerbody = smoothCreationV2(hemisphere, [1.0,1.0,0.0,1.0]);
+    pacman = new Pacman(lowerbody, upperbody);
+    pacman.init();
+   
+    
+    //pacman = smoothCreationV2(sphere, [1.0, 1.0, 0.0, 1.0]);
+    //pacman.translate([0,0,1.5])
+    //pacman.scale([0.5, 0.5, 0.5]);
+    //pacman.translate([2,6,0], true);
+
+
     //shapes[1].scale([0.3, 0.3, 0.3]);
     //shapes[1].translate([0,0,-0.5]);
 
@@ -48,25 +54,27 @@ async function loadSomething(path) {
     return parse(data);
 }
 
-const moveSpeed = 0.1;
+
 window.addEventListener("keydown", (event) => {
     let xPos = 0;
     let yPos = 0;
     switch (event.key) {
         case 'ArrowUp':
-            yPos -= moveSpeed;
+            yPos -= 1;
             break;
         case 'ArrowDown':
-            yPos += moveSpeed;
+            yPos += 1;
             break;
         case 'ArrowLeft':
-            xPos += moveSpeed;
+            xPos += 1;
             break;
         case 'ArrowRight':
-            xPos -= moveSpeed;
+            xPos -= 1;
             break;
     }
-    pacman.translate([-xPos, -yPos, 0]);
+    pacman.move([-xPos, -yPos, 0]);
+    //pacman.turn90degrees();
+    //pacman.defaultMovement();
 })
 
 
@@ -84,9 +92,12 @@ function render(now) {
 
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
+    pacman.defaultMovement();
+
     shapes.forEach(shape => {
         shape.draw();
     });
+    pacman.drawPacman();
     requestAnimationFrame(render)
 }
 
