@@ -27,6 +27,7 @@ window.onload = async () => {
     
     const upperbody = smoothCreationV2(hemisphere, [1.0,1.0,0.0,1.0]);
     const lowerbody = smoothCreationV2(hemisphere, [1.0,1.0,0.0,1.0]);
+<<<<<<< HEAD
     pacman = new Pacman();
     pacmanLower = new PacmanLowerBody(lowerbody);
     pacmanUpper = new PacmanUpperBody(upperbody);
@@ -34,6 +35,10 @@ window.onload = async () => {
     pacmanUpper.setParent(pacmanLower);
     pacmanLower.setParent(pacman);
 
+=======
+    pacman = new Pacman(lowerbody, upperbody);
+    pacman.init();
+>>>>>>> parent of 94895ea (checkpoint)
    
     
     //pacman = smoothCreationV2(sphere, [1.0, 1.0, 0.0, 1.0]);
@@ -61,26 +66,32 @@ async function loadSomething(path) {
 
 
 window.addEventListener("keydown", (event) => {
-    var direction;
+    let xPos = 0;
+    let yPos = 0;
     switch (event.key) {
         case 'ArrowUp':
-            direction = [0,1,0];
+            yPos -= 1;
             break;
         case 'ArrowDown':
-            direction = [0,-1,0];
+            yPos += 1;
             break;
         case 'ArrowLeft':
-            direction = [-1,0,0];
+            xPos += 1;
             break;
         case 'ArrowRight':
-            direction = [1,0,0];
+            xPos -= 1;
             break;
     }
+<<<<<<< HEAD
     if(direction){
         pacman.move(direction);
     }
     
     
+=======
+    pacman.move([-xPos, -yPos, 0]);
+    //pacman.turn90degrees();
+>>>>>>> parent of 94895ea (checkpoint)
     //pacman.defaultMovement();
 })
 
@@ -104,9 +115,13 @@ function render(now) {
     shapes.forEach(shape => {
         shape.draw();
     });
+<<<<<<< HEAD
     pacmanLower.model.drawLCS();
     //pacman.upperBody.model.drawLCS();
     //pacman.drawPacman();
+=======
+    pacman.drawPacman();
+>>>>>>> parent of 94895ea (checkpoint)
     requestAnimationFrame(render)
 }
 

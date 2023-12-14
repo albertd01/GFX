@@ -9,10 +9,14 @@ class GameObject {
   }
 
   setParent(parent) {
+<<<<<<< HEAD
     this.parent = parent;
+=======
+>>>>>>> parent of 94895ea (checkpoint)
     if (parent) {
-      parent.addChild(this);
+      parent.children.append(this);
     }
+    this.parent = parent;
   }
 
   updateWorldMatrix(parentWorldMatrix) {
@@ -24,16 +28,28 @@ class GameObject {
     } else if (localMatrix) {
         mat4.copy(this.worldMatrix, localMatrix);
     }
+<<<<<<< HEAD
 
     for (const child of this.children) {
         child.updateWorldMatrix(this.worldMatrix);
+=======
+    for (const child of this.children) {
+      child.updateWorldMatrix(this.worldMatrix);
+>>>>>>> parent of 94895ea (checkpoint)
     }
+  }
 
+<<<<<<< HEAD
     }
 
     getLocalMatrix(){
         return mat4.create();
     }
+=======
+  getLocalMatrix() {
+    return mat4.create();
+  }
+>>>>>>> parent of 94895ea (checkpoint)
 }
 
 class Scene {
