@@ -27,7 +27,12 @@ window.onload = async () => {
     
     const upperbody = smoothCreationV2(hemisphere, [1.0,1.0,0.0,1.0]);
     const lowerbody = smoothCreationV2(hemisphere, [1.0,1.0,0.0,1.0]);
-    pacman = new Pacman(lowerbody, upperbody);
+    pacman = new Pacman();
+    pacmanLower = new PacmanLowerBody(lowerbody);
+    pacmanUpper = new PacmanUpperBody(upperbody);
+
+    pacmanUpper.setParent(pacmanLower);
+    pacmanLower.setParent(pacman);
 
    
     
@@ -71,7 +76,10 @@ window.addEventListener("keydown", (event) => {
             direction = [1,0,0];
             break;
     }
-    pacman.move(direction);
+    if(direction){
+        pacman.move(direction);
+    }
+    
     
     //pacman.defaultMovement();
 })
@@ -91,12 +99,12 @@ function render(now) {
 
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    pacman.defaultMovement();
+    pacmanUpper.defaultMovement();
 
     shapes.forEach(shape => {
         shape.draw();
     });
-    pacman.lowerBody.model.drawLCS();
+    pacmanLower.model.drawLCS();
     //pacman.upperBody.model.drawLCS();
     //pacman.drawPacman();
     requestAnimationFrame(render)

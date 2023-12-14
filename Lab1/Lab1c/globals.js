@@ -3,7 +3,10 @@ const toRad = glMatrix.glMatrix.toRadian;
 
 const shapes = [];
 let gl = null;
+
 let pacman = null;
+let pacmanLower = null;
+let pacmanUpper = null;
 
 let currentChoice = 0;
 let cameraMovementEnabled = true;
