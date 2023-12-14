@@ -28,7 +28,7 @@ window.onload = async () => {
     const upperbody = smoothCreationV2(hemisphere, [1.0,1.0,0.0,1.0]);
     const lowerbody = smoothCreationV2(hemisphere, [1.0,1.0,0.0,1.0]);
     pacman = new Pacman(lowerbody, upperbody);
-    pacman.init();
+
    
     
     //pacman = smoothCreationV2(sphere, [1.0, 1.0, 0.0, 1.0]);
@@ -56,24 +56,23 @@ async function loadSomething(path) {
 
 
 window.addEventListener("keydown", (event) => {
-    let xPos = 0;
-    let yPos = 0;
+    var direction;
     switch (event.key) {
         case 'ArrowUp':
-            yPos -= 1;
+            direction = [0,1,0];
             break;
         case 'ArrowDown':
-            yPos += 1;
+            direction = [0,-1,0];
             break;
         case 'ArrowLeft':
-            xPos += 1;
+            direction = [-1,0,0];
             break;
         case 'ArrowRight':
-            xPos -= 1;
+            direction = [1,0,0];
             break;
     }
-    pacman.move([-xPos, -yPos, 0]);
-    //pacman.turn90degrees();
+    pacman.move(direction);
+    
     //pacman.defaultMovement();
 })
 
@@ -97,7 +96,9 @@ function render(now) {
     shapes.forEach(shape => {
         shape.draw();
     });
-    pacman.drawPacman();
+    pacman.lowerBody.model.drawLCS();
+    //pacman.upperBody.model.drawLCS();
+    //pacman.drawPacman();
     requestAnimationFrame(render)
 }
 

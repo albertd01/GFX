@@ -9,10 +9,11 @@ class GameObject {
   }
 
   setParent(parent) {
-    if (parent) {
-      parent.children.append(this);
-    }
+    console.log("setting parent..");
     this.parent = parent;
+    if (parent) {
+      parent.addChild(this);
+    }
   }
 
   updateWorldMatrix(parentWorldMatrix) {
@@ -21,14 +22,16 @@ class GameObject {
     } else {
       mat4.copy(this.worldMatrix, this.getLocalMatrix());
     }
+    var worldMatrix = this.worldMatrix;
     for (const child of this.children) {
-      child.updateWorldMatrix(this.worldMatrix);
+      child.updateWorldMatrix(worldMatrix);
     }
-  }
 
-  getLocalMatrix() {
-    return mat4.create();
-  }
+    }
+
+    getLocalMatrix(){
+        return this.model.transformationMatrix;
+    }
 }
 
 class Scene {
