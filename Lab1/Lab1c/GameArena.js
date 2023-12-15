@@ -1,6 +1,5 @@
-class GameArena extends GameObject{
+class GameArena{
     constructor(){
-        super();
         this.arenaModel =
         [
             ['W','W','W','W','W','W','W','W','W','W','W','W','W','W','W','W','W','W','W',], //1
@@ -29,15 +28,16 @@ class GameArena extends GameObject{
             for(let j= 0; j < this.arenaModel[i].length; ++j){
                 if(this.arenaModel[i][j]==='F'){
                     const floorTile = createFloorTile();
-                    floorTile.translate([j, i, 0]);
+                    floorTile.translate([j, i, 0],true);
                     shapes.push(floorTile);
                 }
                 if(this.arenaModel[i][j]==='W'){
                     const wallTile = createWallTile();
-                    wallTile.translate([j, i, 0]);
+                    wallTile.translate([j, i, 0],true);
                     shapes.push(wallTile);
                 }
             }
         }
     }
+
 }

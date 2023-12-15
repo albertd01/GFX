@@ -7,6 +7,8 @@ let gl = null;
 let pacman = null;
 let pacmanLower = null;
 let pacmanUpper = null;
+let game = null;
+let arena = null;
 
 let currentChoice = 0;
 let cameraMovementEnabled = true;

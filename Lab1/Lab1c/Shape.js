@@ -13,7 +13,6 @@ class Shape {
 
         // initialize transformation and normal matrix
         this.transformationMatrix = mat4.create();
-        //this.worldMatrix = mat4.create();
         this.normalMatrix = mat3.create();
     }
 

@@ -32,10 +32,10 @@ window.onload = async () => {
 
     pacman = new Pacman(lowerbody, upperbody);
 
-    
-    const arena = new GameArena();
+    arena = new GameArena();
     arena.init();
 
+    game = new Game();
     // start render loop
     requestAnimationFrame(render);
 }
@@ -47,7 +47,7 @@ async function loadSomething(path) {
 
 
 window.addEventListener("keydown", (event) => {
-    let direction = [0,0,0];
+    let direction = pacman.direction;
     switch (event.key) {
         case 'ArrowUp':
             direction = [0,1,0];
@@ -62,10 +62,44 @@ window.addEventListener("keydown", (event) => {
             direction = [1,0,0];
             break;
     }
+    //pacman.move();
+    //console.log(pacman.getDistanceFromOrigin());
     if(direction){
-        pacman.move(direction);
+        pacman.setDirection(direction);
     }
 })
+
+window.addEventListener("keydown", (event) => {
+    switch(event.key){
+        case 'g':
+            game.startGame();
+            break;
+        case 'p':
+            game.pauseGame();
+            break;
+    }
+})
+
+window.addEventListener("keydown", (event) => {
+    //shear view construction site
+    if(event.key === 'v'){
+        console.log("here");
+        const theta = Math.acos(vec3.dot(camera.viewingDirection, vec3.fromValues(1,0,0)));
+        const phi = Math.acos(vec3.dot(camera.viewingDirection, vec3.fromValues(0,1,0)));
+        const lambda = Math.acos(vec3.dot(camera.viewingDirection, vec3.fromValues(0,0,1)));
+        console.log(matrices.projectionMatrix);
+        //matrices.projectionMatrix =obliqueProjection(theta, phi, lambda);
+        mat4.mul(matrices.projectionMatrix, matrices.projectionMatrix, obliqueProjection(theta, phi, lambda));
+        console.log(matrices.projectionMatrix);
+        //if(projectionMode === sheared)
+            //define oblique projection matrix
+            //multiply current projection matrix with oblique projection
+        //else
+            //go back to standard projection by multiplying oblique projection matrix with its inverse
+    }
+})
+
+
 
 
 let then = 0;
@@ -82,15 +116,40 @@ function render(now) {
 
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    pacman.defaultMovement();
+    if(game.running){
+        pacman.defaultMovement();
+        if(checkMove()){
+            pacman.move();
+        }
+        updateCamera();
+    }
 
     shapes.forEach(shape => {
         shape.draw();
     });
-    pacman.lowerBody.model.drawLCS();
+    //pacman.lowerBody.model.drawLCS();
     requestAnimationFrame(render)
 }
 
+function updateCamera(){
+    camera.setPosition(pacman.getDistanceFromOrigin());
+    camera.setTarget(pacman.getDistanceFromOrigin());
+    mat4.lookAt(matrices.viewMatrix, camera.position, camera.target, camera.up);
+}
 
+function obliqueProjection(theta, phi, lambda) {
+    // Create a standard orthographic projection matrix
+    console.log("here2");
+    projectionMatrix = mat4.fromValues(
+        1.0, 0.0, lambda * Math.cos(theta), -Math.sin(theta),
+        0.0, 1.0, lambda * Math.sin(phi), -Math.cos(phi),
+        0.0, 0.0, -1.0, 0.0,
+        0.0, 0.0, 0.0, 1.0
+    );
 
+    return projectionMatrix;
+}
 
+function checkMove(){
+    return true;
+}
