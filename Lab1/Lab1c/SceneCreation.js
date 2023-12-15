@@ -11,8 +11,7 @@ class GameObject {
 
   setParent(parent) {
     this.parent = parent;
-=======
->>>>>>> parent of 94895ea (checkpoint)
+
     if (parent) {
       parent.children.append(this);
     }
@@ -29,20 +28,13 @@ class GameObject {
     } else {
       mat4.copy(this.worldMatrix, this.model.transformationMatrix);
     }
-<<<<<<< HEAD
 
     for (const child of this.children) {
         child.updateWorldMatrix(this.worldMatrix);
-=======
     for (const child of this.children) {
       child.updateWorldMatrix(worldMatrix);
     }
   }
 }
-
-class Scene {
-  constructor(rootObject) {
-    this.root = rootObject;
-    this.worldMatrix = mat4.create();
-  }
 }
+

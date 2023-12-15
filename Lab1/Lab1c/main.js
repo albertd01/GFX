@@ -28,15 +28,8 @@ window.onload = async () => {
     
     const upperbody = smoothCreationV2(upper, [1.0,1.0,0.0,1.0]);
     const lowerbody = smoothCreationV2(hemisphere, [1.0,1.0,0.0,1.0]);
-<<<<<<< HEAD
-    pacman = new Pacman();
-    pacmanLower = new PacmanLowerBody(lowerbody);
-    pacmanUpper = new PacmanUpperBody(upperbody);
 
-    pacmanUpper.setParent(pacmanLower);
-    pacmanLower.setParent(pacman);
 
-=======
     pacman = new Pacman(lowerbody, upperbody);
 
     
@@ -54,20 +47,19 @@ async function loadSomething(path) {
 
 
 window.addEventListener("keydown", (event) => {
-    let xPos = 0;
-    let yPos = 0;
+    let direction = [0,0,0];
     switch (event.key) {
         case 'ArrowUp':
-            yPos -= 1;
+            direction = [0,1,0];
             break;
         case 'ArrowDown':
-            yPos += 1;
+            direction = [0,-1,0];
             break;
         case 'ArrowLeft':
-            xPos += 1;
+            direction = [-1,0,0];
             break;
         case 'ArrowRight':
-            xPos -= 1;
+            direction = [1,0,0];
             break;
     }
     if(direction){
@@ -90,7 +82,7 @@ function render(now) {
 
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    pacmanUpper.defaultMovement();
+    pacman.defaultMovement();
 
     shapes.forEach(shape => {
         shape.draw();
