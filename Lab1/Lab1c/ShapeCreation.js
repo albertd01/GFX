@@ -249,11 +249,7 @@ function smoothCreationV2(faces, color){
     const normalData = [];
 
     for(let i = 0; i <faces.length; ++i){
-        //compute crossproduct of (b-a)x(c-a) and add it to each vertex
-       
         faces[i].vertices.forEach(vertex => {
-            bMinusA = new Vertex(faces[i].vertices[1].x - faces[i].vertices[0].x, faces[i].vertices[1].y - faces[i].vertices[0].y, faces[i].vertices[1].z - faces[i].vertices[0].z);
-            cMinusA = new Vertex(faces[i].vertices[2].x - faces[i].vertices[0].x, faces[i].vertices[2].y - faces[i].vertices[0].y, faces[i].vertices[2].z - faces[i].vertices[0].z);
             const normal = faces[i].normal;
             vertex.normal[0] += normal[0];
             vertex.normal[1] += normal[1];
@@ -275,6 +271,36 @@ function smoothCreationV2(faces, color){
     return createShape(positions, colorData, normalData);
 }
 
+function createUpperBody(){
+    const colorData = [];
+    const positions = [];
+    const normalData = [];
+
+    for(let i = 0; i <faces.length; ++i){
+        faces[i].vertices.forEach(vertex => {
+            bMinusA = new Vertex(faces[i].vertices[1].x - faces[i].vertices[0].x, faces[i].vertices[1].y - faces[i].vertices[0].y, faces[i].vertices[1].z - faces[i].vertices[0].z);
+            cMinusA = new Vertex(faces[i].vertices[2].x - faces[i].vertices[0].x, faces[i].vertices[2].y - faces[i].vertices[0].y, faces[i].vertices[2].z - faces[i].vertices[0].z);
+            const normal = faces[i].normal;
+            vertex.normal[0] += normal[0];
+            vertex.normal[1] += normal[1];
+            vertex.normal[2] += normal[2];
+        })
+        for(let j = 0; j < 3; ++j){
+            positions.push(faces[i].vertices[j].x);
+            positions.push(faces[i].vertices[j].y);
+            positions.push(faces[i].vertices[j].z);
+            positions.push(1.0);
+            colorData.push([1.0,1.0,0.0,1.0]);
+        }
+    }
+    
+    for(let i = 0; i <faces.length; ++i){
+        for(let j = 0; j < 3; ++j){
+            normalData.push(faces[i].vertices[j].normal);
+        }
+    }
+    return createShape(positions, colorData, normalData);
+}
 
 function createShape(vertices, colors, normals){
     const shape = new Shape();

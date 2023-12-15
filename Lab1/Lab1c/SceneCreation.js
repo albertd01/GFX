@@ -1,7 +1,8 @@
 class GameObject {
-  constructor() {
+  constructor(model) {
+    this.model = model;
+    //this.worldMatrix = mat4.create();
     this.children = [];
-    this.worldMatrix = mat4.create();
   }
 
   addChild(child) {
@@ -9,7 +10,6 @@ class GameObject {
   }
 
   setParent(parent) {
-    console.log("setting parent..");
     this.parent = parent;
     if (parent) {
       parent.addChild(this);
@@ -18,20 +18,19 @@ class GameObject {
 
   updateWorldMatrix(parentWorldMatrix) {
     if (parentWorldMatrix) {
-      mat4.multiply(this.worldMatrix, parentWorldMatrix, this.getLocalMatrix());
+      mat4.multiply(
+        this.model.transformationMatrix,
+        parentWorldMatrix,
+        this.model.transformationMatrix
+      );
     } else {
-      mat4.copy(this.worldMatrix, this.getLocalMatrix());
+      mat4.copy(this.worldMatrix, this.model.transformationMatrix);
     }
     var worldMatrix = this.worldMatrix;
     for (const child of this.children) {
       child.updateWorldMatrix(worldMatrix);
     }
-
-    }
-
-    getLocalMatrix(){
-        return this.model.transformationMatrix;
-    }
+  }
 }
 
 class Scene {

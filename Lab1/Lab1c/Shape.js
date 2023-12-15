@@ -13,6 +13,7 @@ class Shape {
 
         // initialize transformation and normal matrix
         this.transformationMatrix = mat4.create();
+        //this.worldMatrix = mat4.create();
         this.normalMatrix = mat3.create();
     }
 
@@ -61,6 +62,7 @@ class Shape {
         else {
             const rotationMatrix = mat4.create();
             mat4.rotate(rotationMatrix, rotationMatrix, angle, axis);
+            //mat4.mul(this.worldMatrix, rotationMatrix, this.worldMatrix);
             mat4.mul(this.transformationMatrix, rotationMatrix, this.transformationMatrix)
         }
     }
@@ -72,6 +74,7 @@ class Shape {
         else{
             const translationMatrix = mat4.create();
             mat4.translate(translationMatrix, translationMatrix, vector);
+            //mat4.mul(this.worldMatrix, translationMatrix, this.worldMatrix);
             mat4.mul(this.transformationMatrix, translationMatrix, this.transformationMatrix);
         }
     }
@@ -83,6 +86,7 @@ class Shape {
         else{
             const scalingMatrix = mat4.create();
             mat4.scale(scalingMatrix, scalingMatrix, vector);
+            //mat4.mul(this.worldMatrix, scalingMatrix, this.worldMatrix);
             mat4.mul(this.transformationMatrix, scalingMatrix, this.transformationMatrix);
         }
     }

@@ -8,7 +8,7 @@ window.onload = async () => {
     gl.clearColor(0.729, 0.764, 0.674, 1);
 
     camera = new Camera([10,-4, 32], [10, 10, 0], [0, 1, 0]);
-    light = new Light([5, 5, 20]);
+    light = new Light([5, 5, 30]);
 
     // calculate view and projection matrix
     mat4.perspective(matrices.projectionMatrix, toRad(30), canvas.clientWidth / canvas.clientHeight, 0.1, 100);
@@ -22,26 +22,15 @@ window.onload = async () => {
 
     const sphere = await loadSomething('sphere_smooth.obj');
     const hemisphere = await loadSomething('hemisphere_with_normals.obj');
+    const upper = await loadSomething('pacmanUpper.obj');
 
 
     
-    const upperbody = smoothCreationV2(hemisphere, [1.0,1.0,0.0,1.0]);
+    const upperbody = smoothCreationV2(upper, [1.0,1.0,0.0,1.0]);
     const lowerbody = smoothCreationV2(hemisphere, [1.0,1.0,0.0,1.0]);
     pacman = new Pacman(lowerbody, upperbody);
 
-   
     
-    //pacman = smoothCreationV2(sphere, [1.0, 1.0, 0.0, 1.0]);
-    //pacman.translate([0,0,1.5])
-    //pacman.scale([0.5, 0.5, 0.5]);
-    //pacman.translate([2,6,0], true);
-
-
-    //shapes[1].scale([0.3, 0.3, 0.3]);
-    //shapes[1].translate([0,0,-0.5]);
-
-    //shapes.push(createFloorTile());
-
     const arena = new GameArena();
     arena.init();
 
@@ -71,9 +60,9 @@ window.addEventListener("keydown", (event) => {
             direction = [1,0,0];
             break;
     }
-    pacman.move(direction);
-    
-    //pacman.defaultMovement();
+    if(direction){
+        pacman.move(direction);
+    }
 })
 
 
@@ -97,8 +86,6 @@ function render(now) {
         shape.draw();
     });
     pacman.lowerBody.model.drawLCS();
-    //pacman.upperBody.model.drawLCS();
-    //pacman.drawPacman();
     requestAnimationFrame(render)
 }
 
