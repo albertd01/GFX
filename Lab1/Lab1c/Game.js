@@ -8,4 +8,9 @@ class Game{
     pauseGame(){
         this.running = false;
     }
+    checkGameOver(){
+        if(arena.dots.length===0){
+            this.pauseGame();
+        }
+    }
 }

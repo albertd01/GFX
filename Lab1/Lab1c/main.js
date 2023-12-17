@@ -18,22 +18,23 @@ window.onload = async () => {
     shaderPrograms.phongSpecular = new ShaderProgram(shaders.phongVertex, shaders.phongFragmentSpecular, shaderInfo);
     shaderPrograms.phongSpecular.enable();
 
-    wcs = createWCS();
+    //wcs = createWCS();
 
-    const sphere = await loadSomething('sphere_smooth.obj');
+    const sphereModel = await loadSomething('sphere_smooth.obj');
     const hemisphere = await loadSomething('hemisphere_with_normals.obj');
     const upper = await loadSomething('pacmanUpper.obj');
 
-
     
-    const upperbody = smoothCreationV2(upper, [1.0,1.0,0.0,1.0]);
-    const lowerbody = smoothCreationV2(hemisphere, [1.0,1.0,0.0,1.0]);
+    const upperbody = smoothCreationV2(upper, [1.0, 1.0, 0.0, 1.0]);
+    const lowerbody = smoothCreationV2(hemisphere, [1.0, 1.0, 0.0, 1.0]);
+    
+
 
 
     pacman = new Pacman(lowerbody, upperbody);
 
     arena = new GameArena();
-    arena.init();
+    arena.init(sphereModel);
 
     game = new Game();
     // start render loop
@@ -81,21 +82,18 @@ window.addEventListener("keydown", (event) => {
 })
 
 window.addEventListener("keydown", (event) => {
+    //maybe just shear the projection matrix
+
     //shear view construction site
-    if(event.key === 'v'){
-        console.log("here");
-        const theta = Math.acos(vec3.dot(camera.viewingDirection, vec3.fromValues(1,0,0)));
-        const phi = Math.acos(vec3.dot(camera.viewingDirection, vec3.fromValues(0,1,0)));
-        const lambda = Math.acos(vec3.dot(camera.viewingDirection, vec3.fromValues(0,0,1)));
-        console.log(matrices.projectionMatrix);
-        //matrices.projectionMatrix =obliqueProjection(theta, phi, lambda);
-        mat4.mul(matrices.projectionMatrix, matrices.projectionMatrix, obliqueProjection(theta, phi, lambda));
-        console.log(matrices.projectionMatrix);
-        //if(projectionMode === sheared)
-            //define oblique projection matrix
-            //multiply current projection matrix with oblique projection
-        //else
-            //go back to standard projection by multiplying oblique projection matrix with its inverse
+    if(event.key === 'v' ){
+        if(!camera.viewSheared){
+            camera.shearView();
+            camera.viewSheared = true;
+        }
+        else{
+            camera.invertShearView();
+            camera.viewSheared = false;
+        }
     }
 })
 
@@ -118,16 +116,12 @@ function render(now) {
 
     if(game.running){
         pacman.defaultMovement();
-        if(checkMove()){
-            pacman.move();
-        }
-        updateCamera();
+        pacman.move();
+        camera.updateCamera();
     }
-
-    shapes.forEach(shape => {
-        shape.draw();
-    });
-    //pacman.lowerBody.model.drawLCS();
+    arena.draw();
+    pacman.draw();
+    game.checkGameOver();
     requestAnimationFrame(render)
 }
 
@@ -137,19 +131,3 @@ function updateCamera(){
     mat4.lookAt(matrices.viewMatrix, camera.position, camera.target, camera.up);
 }
 
-function obliqueProjection(theta, phi, lambda) {
-    // Create a standard orthographic projection matrix
-    console.log("here2");
-    projectionMatrix = mat4.fromValues(
-        1.0, 0.0, lambda * Math.cos(theta), -Math.sin(theta),
-        0.0, 1.0, lambda * Math.sin(phi), -Math.cos(phi),
-        0.0, 0.0, -1.0, 0.0,
-        0.0, 0.0, 0.0, 1.0
-    );
-
-    return projectionMatrix;
-}
-
-function checkMove(){
-    return true;
-}

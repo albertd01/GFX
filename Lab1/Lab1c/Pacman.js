@@ -71,6 +71,13 @@ class Pacman {
         this.lowerBody.model.translate([-translationVector[0], -translationVector[1], -translationVector[2]], true);
         this.upperBody.model.translate([-translationVector[0], -translationVector[1], -translationVector[2]], true);
     }
+    else{
+        arena.removeDot(this.arenaPosition[1], this.arenaPosition[0])
+    }
+  }
+  draw(){
+    this.lowerBody.model.draw();
+    this.upperBody.model.draw();
   }
 }
 
