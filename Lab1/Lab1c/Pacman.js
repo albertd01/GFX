@@ -1,7 +1,7 @@
 class Pacman {
   constructor(lowerBody, upperBody) {
-    this.upperBody = new PacmanUpperBody(upperBody);
-    this.lowerBody = new PacmanLowerBody(lowerBody);
+    this.upperBody = new PacmanUpperBody(smoothCreationV2(upperBody, [1.0, 1.0, 0.0, 1.0]));
+    this.lowerBody = new PacmanLowerBody(smoothCreationV2(lowerBody, [1.0, 1.0, 0.0, 1.0]));
     this.direction = [-1, 0, 0];
     this.arenaPosition =[1,1];
   }
@@ -15,6 +15,11 @@ class Pacman {
   drawPacman() {
     this.lowerBody.model.draw();
     this.upperBody.model.draw();
+  }
+
+  jump(){
+    //set isJumping field to true so that move can check if dots should be removed
+    //use a sine function for the jump-motion
   }
 
   defaultMovement() {
@@ -48,7 +53,7 @@ class Pacman {
   }
 
   move() {
-    const moveSpeed = 0.05;
+    const moveSpeed = 0.1;
 
     
 
@@ -63,17 +68,25 @@ class Pacman {
     this.upperBody.model.translate(translationVector, true);
 
     const originDistance = this.getDistanceFromOrigin();
-    //console.log(originDistance);
     this.arenaPosition = [Math.floor(originDistance[0]) , Math.floor(originDistance[1])];
-    //console.log(this.arenaPosition);
     if(arena.arenaModel[this.arenaPosition[1]][this.arenaPosition[0]] === 'W'){
-        //console.log("recognizing wall")
         this.lowerBody.model.translate([-translationVector[0], -translationVector[1], -translationVector[2]], true);
         this.upperBody.model.translate([-translationVector[0], -translationVector[1], -translationVector[2]], true);
     }
     else{
-        arena.removeDot(this.arenaPosition[1], this.arenaPosition[0])
+        arena.removeDot(this.arenaPosition[1], this.arenaPosition[0]);
+        document.querySelector(".points").innerHTML = "remaining points: " + arena.dots.length;
     }
+    for(let i = 0; i<ghosts.length; ++i){
+      if(ghosts[i].arenaPosition){
+        if(ghosts[i].arenaPosition[0] === this.arenaPosition[0] && ghosts[i].arenaPosition[1] === this.arenaPosition[1]){
+          --game.lives;
+          game.resetState();
+          return;
+        }
+      }
+    }
+    document.querySelector(".lives").innerHTML = game.lives;
   }
   draw(){
     this.lowerBody.model.draw();

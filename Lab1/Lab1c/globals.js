@@ -4,11 +4,20 @@ const toRad = glMatrix.glMatrix.toRadian;
 const shapes = [];
 let gl = null;
 
+let models = {
+    sphereModel: null,
+    hemisphere: null,
+    upper: null,
+    ghostHead: null,
+    ghostTorso: null,
+}
+
 let pacman = null;
 let pacmanLower = null;
 let pacmanUpper = null;
 let game = null;
 let arena = null;
+let ghosts= [];
 
 let currentChoice = 0;
 let cameraMovementEnabled = true;

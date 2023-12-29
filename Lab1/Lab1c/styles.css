@@ -1,0 +1,76 @@
+.navbar {
+    position: fixed;
+    width: 100vw;
+    background-color: rgb(255, 153, 255);
+    height: 5vh;
+    color: grey;
+    font-size: 2rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    font-family: "Press Start 2P";
+}
+
+.heart-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.heartImage {
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+}
+
+#canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+#winDialog{
+    width: 40vw;
+    background-color: aquamarine;
+    font-size: 4.5rem;
+    font-family: "Press Start 2P";
+}
+#winDialog div{
+    padding-top: 2rem;
+    display:flex;
+    justify-content: space-around;
+    align-items: center;
+}
+#loseDialog{
+    width: 40vw;
+    background-color: aquamarine;
+    font-size: 4.5rem;
+    font-family: "Press Start 2P";
+}
+#loseDialog div{
+    padding-top: 2rem;
+    display:flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.quit,.replay{
+    background-color: yellow;
+    color: black;
+    padding: 16px;
+    border: none;
+    font-size: 3rem;
+}
+.quitLose,.replayLose{
+    background-color: yellow;
+    color: black;
+    padding: 16px;
+    border: none;
+    font-size: 3rem;
+}
